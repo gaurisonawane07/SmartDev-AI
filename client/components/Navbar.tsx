@@ -14,6 +14,9 @@ export default function Navbar() {
                     <span className="text-xl font-bold tracking-tight">SmartDev AI</span>
                 </div>
                 <div className="flex items-center gap-4">
+                    <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+                        Dashboard
+                    </Link>
                     <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground">
                         Sign In
                     </Link>

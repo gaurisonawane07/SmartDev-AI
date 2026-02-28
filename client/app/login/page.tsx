@@ -4,16 +4,30 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Bot, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Input, Button } from "@/components/AuthUI";
+import { api } from "@/lib/api";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // TODO: Implement backend hit to /api/auth/login
-    setTimeout(() => setLoading(false), 1500);
+    setError("");
+    try {
+      const response = await api.login({ email, password });
+      localStorage.setItem("token", response.token);
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.message || "Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,16 +55,25 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="rounded-lg bg-destructive/10 p-3 text-xs font-medium text-destructive">
+              {error}
+            </div>
+          )}
           <Input
             label="Email Address"
             type="email"
             placeholder="name@company.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <Input
             label="Password"
             type="password"
             placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
 

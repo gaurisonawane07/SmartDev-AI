@@ -111,7 +111,7 @@ export default function FeatureGrid() {
                                 across multiple chat sessions with powerful search.
                             </p>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 w-full max-w-[200px]">
+                        <div className="grid grid-cols-2 gap-2 w-full max-w-50">
                             {[1, 2, 3, 4].map(i => (
                                 <div key={i} className="h-12 rounded-lg bg-white/5 border border-white/5" />
                             ))}

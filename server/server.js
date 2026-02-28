@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import connectDB from "./config/Db.js";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 
@@ -14,6 +15,7 @@ const port = process.env.PORT || 5000;
 connectDB();
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Backend running");

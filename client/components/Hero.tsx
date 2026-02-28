@@ -48,16 +48,16 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.3 }}
             >
                 <Link
+                    href="/dashboard"
+                    className="group flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-lg font-bold text-white transition-all hover:bg-primary/90 glow-primary"
+                >
+                    Open Dashboard <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link
                     href="/register"
                     className="group flex items-center gap-2 rounded-full bg-white px-8 py-4 text-lg font-bold text-black transition-all hover:bg-zinc-200"
                 >
-                    Start Building <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Link>
-                <Link
-                    href="#features"
-                    className="rounded-full border border-border bg-secondary/50 px-8 py-4 text-lg font-bold backdrop-blur-sm transition-all hover:bg-secondary"
-                >
-                    See Features
+                    Start Building
                 </Link>
             </motion.div>
         </section>
