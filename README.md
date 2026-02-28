@@ -186,7 +186,18 @@ ai-dev-assistance/
 - **Node.js** (v18 or higher)
 - **MongoDB** (local or Atlas)
 - **Git**
-- **Groq API Key** ([Get it here](https://console.groq.com/))
+- **Groq API Key** - Required for AI features ([Get it here](https://console.groq.com/))
+
+### 🔑 Getting Your Groq API Key
+
+1. Visit [Groq Console](https://console.groq.com/)
+2. Sign up or log in to your account
+3. Navigate to **API Keys** section
+4. Click **Create API Key**
+5. Copy your API key (keep it secure!)
+6. Add it to your `.env` file as `GROQ_API_KEY`
+
+> **Note**: Groq provides free tier access with generous limits. The platform offers ultra-fast inference speeds, making it perfect for real-time AI chat applications.
 
 ### Clone the Repository
 
@@ -208,9 +219,14 @@ Create a `.env` file in the `server` directory:
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
-GROQ_API_KEY=your_groq_api_key
+GROQ_API_KEY=gsk_your_actual_groq_api_key_here
 NODE_ENV=development
 ```
+
+> **Important**: 
+> - Get your Groq API key from [https://console.groq.com/keys](https://console.groq.com/keys)
+> - Never commit your `.env` file to version control
+> - The Groq API key starts with `gsk_`
 
 Start the backend server:
 
@@ -249,13 +265,20 @@ The client will run on `http://localhost:3000`
 
 ### Server (.env)
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `PORT` | Server port number | Yes |
-| `MONGO_URI` | MongoDB connection string | Yes |
-| `JWT_SECRET` | Secret key for JWT signing | Yes |
-| `GROQ_API_KEY` | Groq API key for AI features | Yes |
-| `NODE_ENV` | Environment (development/production) | No |
+| Variable | Description | Required | Example |
+|----------|-------------|----------|----------|
+| `PORT` | Server port number | Yes | `5000` |
+| `MONGO_URI` | MongoDB connection string | Yes | `mongodb://localhost:27017/smartdev` or `mongodb+srv://...` |
+| `JWT_SECRET` | Secret key for JWT signing | Yes | `your_super_secret_jwt_key_here` |
+| `GROQ_API_KEY` | Groq API key for AI chat ([Get here](https://console.groq.com/keys)) | Yes | `gsk_...` |
+| `NODE_ENV` | Environment mode | No | `development` or `production` |
+
+**Getting Groq API Key:**
+- Sign up at [Groq Console](https://console.groq.com/)
+- Navigate to API Keys section
+- Create a new API key
+- Free tier available with generous limits
+- Model used: `openai/gpt-oss-120b` (ultra-fast inference)
 
 ### Client (.env.local)
 
@@ -415,6 +438,54 @@ Authorization: Bearer <token>
 - Use conversation history for context-aware follow-ups
 - Save important snippets to notes for future reference
 - Monitor your usage to stay within limits
+
+### About Groq AI Integration
+
+This project uses **Groq's ultra-fast LLM inference** with the `openai/gpt-oss-120b` model:
+- ⚡ **Lightning-fast responses** (typically under 1 second)
+- 🆓 **Free tier available** with generous API limits
+- 🧠 **120B parameter model** for high-quality responses
+- 💬 **Context-aware** conversation history support
+
+**Why Groq?**
+- Fastest inference speed in the industry
+- Free tier perfect for development and small projects
+- Easy integration with simple SDK
+- No complex setup required
+
+---
+
+## 🔧 Troubleshooting
+
+### Groq API Issues
+
+**Error: "AI generation failed"**
+- Verify your `GROQ_API_KEY` is correct in `.env`
+- Check the key starts with `gsk_`
+- Ensure you haven't exceeded rate limits
+- Visit [Groq Console](https://console.groq.com/) to check your API status
+
+**Error: "Monthly AI request limit reached"**
+- Free tier users: 50 requests/month
+- Check usage in dashboard
+- Wait for monthly reset or upgrade to Pro
+
+**Connection Issues**
+- Verify internet connectivity
+- Check if Groq API is operational: [status.groq.com](https://status.groq.com)
+- Review server logs for detailed error messages
+
+### MongoDB Connection Issues
+
+- Verify `MONGO_URI` in `.env` is correct
+- Check MongoDB is running (local) or accessible (Atlas)
+- Ensure IP whitelist is configured (Atlas)
+
+### JWT Authentication Issues
+
+- Make sure `JWT_SECRET` is set in `.env`
+- Clear browser localStorage and login again
+- Check token expiration settings
 
 ---
 
