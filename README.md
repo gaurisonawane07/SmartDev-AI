@@ -33,73 +33,58 @@
 
 ---
 
-## 🔍 Overview
+#**SmartDev AI Assistant** is a high-end, full-stack developer workspace designed to streamline technical workflows. It provides a premium, "Neural OS" inspired environment where developers can:
 
-**SmartDev AI Assistant** is a full-stack SaaS platform designed for developers to streamline their workflow with AI-powered features. It provides an integrated environment where developers can:
-
-- 💬 Chat with an intelligent AI assistant for code help and debugging
-- 📝 Create and manage development notes and snippets
-- 💾 Save AI responses directly to notes for future reference
-- 🔒 Secure authentication with JWT
-- 📊 Track AI usage with monthly request limits
-- 🎨 Modern, responsive UI with smooth animations
-
-The platform uses **Groq's lightning-fast LLM inference** with the GPT-OSS-120B model to provide near-instantaneous AI responses.
+- 💬 **Neural Chat**: Consult an intelligent AI assistant with full-width, markdown-supported conversations.
+- 🚀 **Integrated Playground**: Write and execute code (JS, TS, Python, etc.) in a real-time Monaco-based editor.
+- 📝 **Artifact Vault**: Automatically save AI-generated code snippets and technical insights into a persistent notes system.
+- ↔️ **Adaptive UI**: Customize your workflow with a resizable, draggable sidebar and glassmorphic design.
+- ⌨️ **Power-User Shortcuts**: Navigate instantly with global hotkeys like `Ctrl + L`.
+- 📊 **Compute Tracking**: Monitor high-speed inference usage powered by Groq's LLM engine.
 
 ---
 
 ## ✨ Features
 
-### 🤖 AI-Powered Chat
-- **Context-Aware Conversations**: Maintains conversation history for contextual responses
-- **Code Assistance**: Get help with debugging, optimization, and best practices
-- **Fast Response Times**: Powered by Groq SDK for ultra-fast inference
-- **Usage Tracking**: Monitor your AI request consumption
+### 🤖 Neural AI Assistant
+- **Context-Aware Conversations**: Advanced state management for deep technical debugging.
+- **Markdown & Code Support**: Full syntax highlighting for technical responses.
+- **Rapid Inference**: Powered by **Groq Llama-3-70b** for near-zero latency.
+- **Artifact Transmission**: Save technical snippets directly to your dev notes.
 
-### 📝 Notes Management
-- **Create & Organize**: Build your knowledge base with structured notes
-- **Save AI Responses**: One-click save from AI conversations
-- **Search & Filter**: Quickly find notes with advanced search
-- **Tag System**: Organize notes with custom tags
+### 🎮 Technical Playground
+- **Monaco Editor**: A VS Code-like editing experience with IntelliSense and custom themes.
+- **Multi-Language Support**: Execute or simulate JavaScript, TypeScript, Python, CSS, and HTML.
+- **System Console**: Intercept and display real-time console output in a dedicated terminal UI.
+- **Node Status**: Live visual indicators of compiler cycles and sandbox health.
 
-### 🔐 Authentication & Security
-- **JWT-based Authentication**: Secure token-based auth system
-- **Password Encryption**: Bcrypt hashing for password security
-- **Protected Routes**: Middleware-based route protection
-- **Rate Limiting**: API rate limiting to prevent abuse
+### ↔️ Adaptive Layout
+- **Resizable Sidebar**: Draggable width adjustment for a personalized workspace layout.
+- **Fluid UI**: Smooth 60fps animations powered by Framer Motion.
+- **Quick Navigation**: `Ctrl + L` global shortcut to instantly summon the AI Assistant from anywhere.
 
-### 💎 Subscription Tiers
-- **Free Tier**: 50 AI requests per month
-- **Pro Tier**: Enhanced limits for power users
-- **Usage Dashboard**: Real-time tracking of remaining requests
-
-### 🎨 Modern UI/UX
-- **Responsive Design**: Mobile-first approach with Tailwind CSS 4
-- **Smooth Animations**: Framer Motion for fluid interactions
-- **Dark Mode**: Eye-friendly dark theme
-- **Glass Morphism**: Modern glassmorphic design elements
+### 📝 Dev Vault (Notes)
+- **Knowledge Capture**: Structured note-taking for architectural patterns and snippets.
+- **Search & Filter**: Find your past technical solutions indexed across your history.
+- **Persistent Memory**: Seamless synchronization between AI insights and your local note library.
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework**: [Next.js 16.1.6](https://nextjs.org/) (App Router)
-- **UI Library**: [React 19.2.3](https://react.dev/)
-- **Language**: [TypeScript 5.x](https://www.typescriptlang.org/)
+- **Framework**: [Next.js 16.1](https://nextjs.org/) (App Router & Turbopack)
+- **Code Editor**: [@monaco-editor/react](https://github.com/suren-atoyan/monaco-react)
 - **Styling**: [Tailwind CSS 4.x](https://tailwindcss.com/)
-- **Animations**: [Framer Motion 12.34.3](https://www.framer.com/motion/)
+- **Animations**: [Framer Motion 12](https://www.framer.com/motion/)
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **HTTP Client**: [Axios 1.13.5](https://axios-http.com/)
+- **State**: React Hooks (useState, useEffect, useCallback)
 
 ### Backend
-- **Runtime**: [Node.js](https://nodejs.org/)
-- **Framework**: [Express 5.2.1](https://expressjs.com/)
-- **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose 9.1.6](https://mongoosejs.com/)
-- **Authentication**: [JWT](https://jwt.io/) + [bcryptjs](https://github.com/dcodeIO/bcrypt.js)
-- **AI Integration**: [Groq SDK 0.37.0](https://console.groq.com/)
-- **Security**: [CORS](https://github.com/expressjs/cors), [Express Rate Limit](https://github.com/express-rate-limit/express-rate-limit)
-- **Environment**: [dotenv](https://github.com/motdotla/dotenv)
+- **Engine**: [Node.js](https://nodejs.org/) & [Express 5.x](https://expressjs.com/)
+- **Database**: [MongoDB](https://www.mongodb.com/) & [Mongoose](https://mongoosejs.com/)
+- **AI Inference**: [Groq SDK](https://groq.com/) (Meta Llama 3)
+- **Security**: JWT Authentication, Bcrypt Hashing, & Express Rate Limiting
 
 ---
 
@@ -107,60 +92,20 @@ The platform uses **Groq's lightning-fast LLM inference** with the GPT-OSS-120B 
 
 ```
 ai-dev-assistance/
-├── client/                      # Next.js frontend
+├── client/                      # Next.js Frontend (Neural App)
 │   ├── app/
-│   │   ├── dashboard/           # Protected dashboard routes
-│   │   │   ├── ai/              # AI chat interface
-│   │   │   ├── notes/           # Notes management
-│   │   │   ├── layout.tsx       # Dashboard layout with sidebar
-│   │   │   └── page.tsx         # Dashboard home
-│   │   ├── login/               # Login page
-│   │   ├── register/            # Registration page
-│   │   ├── globals.css          # Global styles
-│   │   ├── layout.tsx           # Root layout
-│   │   └── page.tsx             # Landing page
-│   ├── components/              # Reusable React components
-│   │   ├── AuthUI.tsx
-│   │   ├── CTA.tsx
-│   │   ├── FeatureGrid.tsx
-│   │   ├── Footer.tsx
-│   │   ├── Hero.tsx
-│   │   ├── Navbar.tsx
-│   │   ├── Sidebar.tsx
-│   │   └── TrustSection.tsx
-│   ├── lib/
-│   │   ├── api.ts               # API client configuration
-│   │   └── utils.ts             # Utility functions
-│   └── package.json
+│   │   ├── dashboard/           
+│   │   │   ├── ai/              # Neural AI Assistant (Chat)
+│   │   │   ├── playground/      # Technical Playground (Monaco Editor)
+│   │   │   ├── notes/           # Dev Vault (Notes System)
+│   │   │   └── layout.tsx       # Adaptive Sidebar & Keyboard Hooks
+│   ├── components/              # Premium Design System
+│   └── lib/                     # API & Service Layers
 │
-├── server/                      # Express backend
-│   ├── config/
-│   │   └── Db.js                # MongoDB connection config
-│   ├── controllers/
-│   │   ├── aiController.js      # AI chat logic
-│   │   ├── authController.js    # Authentication logic
-│   │   └── noteController.js    # Notes CRUD operations
-│   ├── middlewares/
-│   │   ├── authMiddleware.js    # JWT verification
-│   │   ├── errorMiddleware.js   # Error handling
-│   │   └── rateLimiter.js       # Rate limiting
-│   ├── models/
-│   │   ├── AIRequest.js         # AI conversation model
-│   │   ├── note.model.js        # Note model
-│   │   └── user.model.js        # User model
-│   ├── routes/
-│   │   ├── aiRoutes.js          # AI endpoints
-│   │   ├── authRoutes.js        # Auth endpoints
-│   │   ├── noteRoutes.js        # Notes endpoints
-│   │   └── userRoutes.js        # User endpoints
-│   ├── services/
-│   │   └── ai.service.js        # Groq AI integration
-│   ├── utils/
-│   │   └── generateToken.js     # JWT token generation
-│   ├── server.js                # Express app entry point
-│   └── package.json
-│
-└── README.md
+├── server/                      # Express Backend (Compute Engine)
+│   ├── controllers/             # Logic Handlers
+│   ├── services/                # Groq AI Integration
+│   └── models/                  # Mongo Data Schemas
 ```
 
 ---
@@ -168,48 +113,43 @@ ai-dev-assistance/
 ## 🚀 Installation
 
 ### Prerequisites
-- **Node.js** (v18 or higher)
-- **MongoDB** (local or Atlas)
-- **Git**
-- **Groq API Key** - Required for AI features ([Get it here](https://console.groq.com/))
+- **Node.js** (v18+)
+- **MongoDB**
+- **Groq API Key** ([Get it here](https://console.groq.com/))
 
-### 🔑 Getting Your Groq API Key
+### Getting Started
 
-1. Visit [Groq Console](https://console.groq.com/)
-2. Sign up or log in to your account
-3. Navigate to **API Keys** section
-4. Click **Create API Key**
-5. Copy your API key (keep it secure!)
-6. Add it to your `.env` file as `GROQ_API_KEY`
+1. **Clone & Install**
+   ```bash
+   git clone https://github.com/yourusername/ai-dev-assistance.git
+   cd ai-dev-assistance
+   cd server && npm install
+   cd ../client && npm install
+   ```
 
-> **Note**: Groq provides free tier access with generous limits. The platform offers ultra-fast inference speeds, making it perfect for real-time AI chat applications.
+2. **Configure Environment**
+   Set up your `.env` in the `server` folder with your `GROQ_API_KEY`, `MONGO_URI`, and `JWT_SECRET`.
 
-### Clone the Repository
+3. **Initialize Workspace**
+   ```bash
+   # Terminal 1
+   cd server && npm run dev
+   
+   # Terminal 2
+   cd client && npm run dev
+   ```
 
-```bash
-git clone https://github.com/yourusername/ai-dev-assistance.git
-cd ai-dev-assistance
-```
+---
 
-### Backend Setup
+## ⌨️ Shortcuts
+| Shortcut | Action |
+| :--- | :--- |
+| `Ctrl + L` | Open AI Assistant |
+| `Ctrl + S` | Save Current Artifact |
+| `Ctrl + /` | Toggle Sidebar (Planned) |
 
-```bash
-cd server
-npm install
-```
-
-Create a `.env` file in the `server` directory:
-
-```env
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-GROQ_API_KEY=gsk_your_actual_groq_api_key_here
-NODE_ENV=development
-```
-
-> **Important**: 
-> - Get your Groq API key from [https://console.groq.com/keys](https://console.groq.com/keys)
+---
+/keys](https://console.groq.com/keys)
 > - Never commit your `.env` file to version control
 > - The Groq API key starts with `gsk_`
 

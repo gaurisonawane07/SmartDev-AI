@@ -1,13 +1,14 @@
 import express from "express";
 import protect from "../middlewares/authMiddleware.js";
+import { getProfile, updateProfile } from "../controllers/userController.js";
 
 const router = express.Router();
 
-router.get("/profile", protect, (req, res) => {
-  res.status(200).json({
-    message: "Profile accessed successfully",
-    user: req.user,
-  });
-});
+/**
+ * @route   /api/user/profile
+ */
+router.route("/profile")
+    .get(protect, getProfile)
+    .put(protect, updateProfile);
 
 export default router;

@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tiptap/extension-highlight": "^3.20.4",
     "@tiptap/extension-placeholder": "^3.20.4",

@@ -5,10 +5,10 @@ import {
     Send,
     Bot,
     User,
-    Code,
     Loader2,
     Plus,
-    Save
+    Save,
+    ChevronRight,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -16,10 +16,9 @@ import { aiService } from "@/lib/services/aiService";
 import { noteService } from "@/lib/services/noteService";
 import { useSearchParams, useRouter } from "next/navigation";
 
+// External Components
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const initialMessages = [
     { role: "assistant", content: "Hello! I'm your AI Assistant. How can I help you with your code today?" },
@@ -34,7 +33,12 @@ function ChatInterface() {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [conversationId, setConversationId] = useState<string | null>(null);
+    const [mounted, setMounted] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Sync with URL ID
     useEffect(() => {
@@ -108,49 +112,43 @@ function ChatInterface() {
         }
     };
 
-    const handleSaveAsNote = async (content: string) => {
+    const handleSaveAsNote = (content: string) => {
         try {
-            await noteService.create({
+            noteService.create({
                 title: "AI Snippet: " + new Date().toLocaleDateString(),
                 content: content
             });
-            alert("Successfully saved to your technical vault!");
+            alert("Successfully saved to your dev notes!");
         } catch (error) {
             alert("Failed to save snippet.");
         }
     };
 
     return (
-        <div className="flex h-full overflow-hidden bg-black">
-            <main className="flex flex-1 flex-col p-6 min-w-0 relative">
-                {/* Simplified Header */}
-                <header className="mb-8 flex items-center justify-between px-4 py-3 border-b border-white/5 relative z-10">
-                    <div className="flex items-center gap-4">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20">
-                            <Bot className="h-6 w-6" />
+        <div className="flex h-screen overflow-hidden bg-black text-white">
+            {/* AI Assistant (Chat) */}
+            <div className="flex flex-1 flex-col relative z-10 glass-bg">
+                {/* Minimal Header */}
+                <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 shrink-0 bg-black/40 backdrop-blur-md">
+                    <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 bg-primary/20 rounded-xl flex items-center justify-center text-primary border border-primary/20 shadow-lg shadow-primary/10">
+                            <Bot className="h-5 w-5" />
                         </div>
-                        <div>
-                            <h1 className="text-lg font-bold text-white tracking-tight">AI Assistant</h1>
-                            <div className="flex items-center gap-2 mt-0.5">
-                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]" />
-                                <p className="text-[10px] font-medium text-emerald-500/80 uppercase tracking-widest">Online</p>
-                            </div>
-                        </div>
+                        <h1 className="text-sm font-black uppercase tracking-widest italic tracking-tighter">AI Assistant</h1>
                     </div>
-
                     <button
-                        onClick={() => router.push("/dashboard/ai")}
-                        className="flex items-center gap-2 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:text-white transition-colors"
+                        onClick={handleNewChat}
+                        className="p-2 hover:bg-white/5 rounded-lg text-muted-foreground hover:text-white transition-all group"
+                        title="New Session"
                     >
-                        <Plus className="h-4 w-4" />
-                        New Chat
+                        <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform" />
                     </button>
                 </header>
 
-                {/* Messages Panel - No Cards, just text on black */}
+                {/* Messages Panel */}
                 <div
                     ref={scrollRef}
-                    className="flex-1 overflow-y-auto space-y-12 pr-4 mb-6 custom-scrollbar px-6 relative z-10"
+                    className="flex-1 overflow-y-auto space-y-8 p-6 custom-scrollbar"
                 >
                     <AnimatePresence initial={false}>
                         {messages.map((msg, i) => (
@@ -158,95 +156,77 @@ function ChatInterface() {
                                 key={i}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3 }}
                                 className={cn(
-                                    "flex w-full gap-5",
+                                    "flex w-full gap-4",
                                     msg.role === "user" ? "flex-row-reverse" : "flex-row"
                                 )}
                             >
-                                {/* Avatar */}
                                 <div className={cn(
-                                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border",
+                                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border",
                                     msg.role === "user" 
-                                        ? "bg-white/5 border-white/10 text-white" 
-                                        : "bg-primary/10 border-primary/20 text-primary"
+                                        ? "bg-white/5 border-white/10 text-white/40" 
+                                        : "bg-primary/20 border-primary/40 text-primary"
                                 )}>
-                                    {msg.role === "user" ? <User className="h-5 w-5" /> : <Bot className="h-5 w-5" />}
+                                    {msg.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                                 </div>
 
-                                {/* Content area - No card box */}
                                 <div className={cn(
-                                    "flex flex-col gap-2 max-w-[80%]",
+                                    "flex flex-col gap-1.5 max-w-[85%]",
                                     msg.role === "user" ? "items-end" : "items-start"
                                 )}>
                                     <div className={cn(
-                                        "text-[15px] leading-relaxed text-white/90 font-medium",
+                                        "text-[14px] leading-relaxed text-white/90 font-medium",
                                         msg.role === "user" ? "text-right" : "text-left"
                                     )}>
                                         {msg.role === "user" ? (
                                             msg.content
                                         ) : (
-                                            <div className="prose prose-invert max-w-none prose-p:leading-relaxed prose-code:text-primary prose-strong:text-white">
+                                            <div className="prose prose-invert max-w-none prose-p:leading-relaxed prose-code:text-primary">
                                                 <ReactMarkdown
                                                     remarkPlugins={[remarkGfm]}
                                                     components={{
                                                         code({ node, inline, className, children, ...props }: any) {
                                                             const match = /language-(\w+)/.exec(className || "");
-                                                            return !inline && match ? (
-                                                                <div className="relative group/code my-6">
-                                                                    <div className="absolute right-3 top-3 z-20 opacity-0 group-hover/code:opacity-100 transition-opacity">
-                                                                        <button
-                                                                            onClick={() => navigator.clipboard.writeText(String(children))}
-                                                                            className="p-2 rounded-lg bg-white/5 hover:bg-primary text-white transition-all border border-white/10 active:scale-90"
-                                                                        >
-                                                                            <Code className="h-3.5 w-3.5" />
-                                                                        </button>
+                                                            const codeValue = String(children).replace(/\n$/, "");
+                                                            
+                                                            if (!inline && match) {
+                                                                return (
+                                                                    <div className="group/code relative my-4 rounded-xl overflow-hidden border border-white/10 bg-[#0D0D0D]">
+                                                                        <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/5">
+                                                                            <span className="text-[9px] font-black uppercase text-primary/80 tracking-widest">{match[1]}</span>
+                                                                        </div>
+                                                                        <div className="p-4 overflow-x-auto text-[13px] font-mono opacity-80 whitespace-pre">
+                                                                            {codeValue}
+                                                                        </div>
                                                                     </div>
-                                                                    <SyntaxHighlighter
-                                                                        style={atomDark}
-                                                                        language={match[1]}
-                                                                        PreTag="div"
-                                                                        {...props}
-                                                                        customStyle={{
-                                                                            margin: 0,
-                                                                            background: "#0D0D0D",
-                                                                            padding: "1.5rem",
-                                                                            borderRadius: "1rem",
-                                                                            border: "1px solid rgba(255,255,255,0.05)",
-                                                                            fontSize: "13px",
-                                                                            lineHeight: "1.6"
-                                                                        }}
-                                                                    >
-                                                                        {String(children).replace(/\n$/, "")}
-                                                                    </SyntaxHighlighter>
-                                                                </div>
-                                                            ) : (
+                                                                );
+                                                            }
+                                                            return (
                                                                 <code className={cn("bg-white/5 text-primary px-1.5 py-0.5 rounded font-mono text-[13px]", className)} {...props}>
                                                                     {children}
                                                                 </code>
                                                             );
                                                         },
-                                                        p: ({ children }) => <p className="mb-4 last:mb-0 opacity-90">{children}</p>,
-                                                        ul: ({ children }) => <ul className="list-disc ml-6 mb-4 space-y-2 opacity-90">{children}</ul>,
+                                                        p: ({ children }) => <p className="mb-4 last:mb-0 opacity-80">{children}</p>,
                                                     }}
                                                 >
                                                     {msg.content}
                                                 </ReactMarkdown>
-
+                                                
                                                 <div className="mt-4 flex items-center gap-3 pt-4 border-t border-white/5">
                                                     <button
                                                         onClick={() => handleSaveAsNote(msg.content)}
-                                                        className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-primary hover:text-white transition-colors"
+                                                        className="text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-primary transition-colors flex items-center gap-1.5"
                                                     >
-                                                        <Save className="h-3.5 w-3.5" />
-                                                        Save to Notes
+                                                        <Save className="h-3 w-3" />
+                                                        Save To Notes
                                                     </button>
                                                 </div>
                                             </div>
                                         )}
                                     </div>
-                                    <span className="text-[9px] font-bold text-white/20 uppercase tracking-widest">
-                                        {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    <span className="text-[8px] font-black text-white/10 uppercase tracking-widest">
+                                        {mounted && new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>
                             </motion.div>
@@ -255,26 +235,26 @@ function ChatInterface() {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="flex items-start gap-5"
+                                className="flex items-start gap-4"
                             >
-                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 text-primary">
-                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                                    <Loader2 className="h-4 w-4 animate-spin" />
                                 </div>
-                                <div className="flex items-center gap-2 h-9 p-0">
-                                    <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary animate-pulse italic">Processing...</span>
+                                <div className="flex items-center gap-2 h-8">
+                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary animate-pulse italic">Thinking...</span>
                                 </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
                 </div>
 
-                {/* Slim Input Hub */}
-                <div className="relative z-10 px-6 pb-6 mt-auto">
-                    <div className="bg-[#0D0D0D] rounded-2xl flex items-center gap-3 border border-white/5 focus-within:border-primary/30 transition-all shadow-2xl relative p-2 pr-3">
+                {/* Input Area */}
+                <div className="p-4 bg-black/40 backdrop-blur-md border-t border-white/5">
+                    <div className="relative flex items-end gap-3 rounded-2xl bg-white/5 p-2 transition-all border border-transparent focus-within:border-primary/20">
                         <textarea
                             rows={1}
-                            placeholder="Ask anything..."
-                            className="flex-1 bg-transparent py-3 px-4 text-[14px] text-white focus:outline-none resize-none max-h-40 custom-scrollbar leading-relaxed placeholder:text-white/20 font-medium"
+                            placeholder="Ask or code anything..."
+                            className="flex-1 bg-transparent py-3 px-4 text-[13px] text-white focus:outline-none resize-none max-h-32 custom-scrollbar font-medium placeholder:text-white/20"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => {
@@ -288,17 +268,17 @@ function ChatInterface() {
                             onClick={handleSend}
                             disabled={!input.trim() || loading}
                             className={cn(
-                                "flex h-10 w-10 items-center justify-center rounded-xl transition-all active:scale-95 shadow-lg",
+                                "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all shadow-xl",
                                 input.trim() && !loading
-                                    ? "bg-primary text-white"
+                                    ? "bg-primary text-white shadow-primary/20"
                                     : "bg-white/5 text-white/10 cursor-not-allowed"
                             )}
                         >
-                            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                            <Send className="h-4 w-4" />
                         </button>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

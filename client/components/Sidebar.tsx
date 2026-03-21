@@ -15,7 +15,8 @@ import {
     Trash2,
     Search,
     Plus,
-    Loader2
+    Loader2,
+    Terminal
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -26,10 +27,12 @@ const menuItems = [
     { icon: LayoutDashboard, label: "Overview", href: "/dashboard" },
     { icon: FileText, label: "My Notes", href: "/dashboard/notes" },
     { icon: MessageSquare, label: "AI Assistant", href: "/dashboard/ai" },
+    { icon: Terminal, label: "Playground", href: "/dashboard/playground" },
     { icon: Settings, label: "Settings", href: "/dashboard/settings" },
 ];
 
-export const Sidebar = () => {
+
+export const Sidebar = ({ width, onResizeStart }: { width: number; onResizeStart: () => void }) => {
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -107,7 +110,15 @@ export const Sidebar = () => {
     );
 
     return (
-        <aside className="fixed left-0 top-0 z-40 h-screen w-72 border-r border-border bg-[#0D0D0D]/80 backdrop-blur-2xl transition-all">
+        <aside 
+            className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-[#0D0D0D]/80 backdrop-blur-2xl transition-all overflow-hidden"
+            style={{ width }}
+        >
+            {/* Resize Handle */}
+            <div 
+                className="absolute right-0 top-0 h-full w-1 cursor-col-resize hover:bg-primary/50 transition-colors z-50"
+                onMouseDown={onResizeStart}
+            />
             <div className="flex h-full flex-col px-4 py-6">
                 {/* Brand */}
                 <div className="mb-8 flex items-center gap-3 px-2">
@@ -135,6 +146,9 @@ export const Sidebar = () => {
                             >
                                 <item.icon className={cn("h-4 w-4", isActive ? "text-white" : "text-muted-foreground group-hover:text-primary transition-colors")} />
                                 {item.label}
+                                {item.label === "AI Assistant" && (
+                                    <span className="ml-auto text-[8px] font-black bg-white/10 px-1.5 py-0.5 rounded border border-white/10 opacity-30 group-hover:opacity-100 transition-opacity uppercase tracking-tighter shrink-0">Ctrl+L</span>
+                                )}
                                 {isActive && (
                                     <motion.div
                                         layoutId="active-nav-glow"
