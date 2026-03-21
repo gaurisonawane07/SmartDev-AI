@@ -71,7 +71,7 @@ export default function NoteEditor({ content, onChange }: NoteEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "prose prose-invert max-w-none focus:outline-none min-h-[400px] px-8 py-6 text-white",
+          "prose prose-invert max-w-none focus:outline-none min-h-[400px] px-4 py-6 md:px-8 text-white",
       },
     },
   });

@@ -103,24 +103,24 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto px-8 py-10">
+    <div className="container mx-auto px-4 py-6 md:px-8 md:py-10">
       {/* Header */}
-      <div className="mb-10 flex items-center justify-between">
+      <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
         >
-          <h1 className="text-3xl font-bold text-white tracking-tight leading-tight">
+          <h1 className="text-2xl font-bold text-white tracking-tight leading-tight md:text-3xl">
             Welcome back, <span className="text-primary">{user?.name || "Developer"}</span>
           </h1>
-          <p className="mt-1 text-muted-foreground flex items-center gap-2">
+          <p className="mt-1 text-xs text-muted-foreground flex items-center gap-2 md:text-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             Sync complete • Workspace active
           </p>
         </motion.div>
         <button 
             onClick={() => router.push("/dashboard/notes")}
-            className="group flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary/90 glow-primary active:scale-95 shadow-lg shadow-primary/20"
+            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition-all hover:bg-primary/90 glow-primary active:scale-95 shadow-lg shadow-primary/20 sm:w-auto sm:py-2.5"
         >
           <Plus className="h-4 w-4 transition-transform group-hover:rotate-90" />
           Create New Note

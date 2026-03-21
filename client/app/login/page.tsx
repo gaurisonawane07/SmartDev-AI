@@ -31,30 +31,30 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background bg-grid flex items-center justify-center px-6">
+    <div className="min-h-screen bg-background bg-grid flex items-center justify-center px-4 py-12 md:px-6">
       <Link
         href="/"
-        className="absolute top-8 left-8 flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+        className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
       >
-        <ArrowLeft className="h-4 w-4" /> Back to home
+        <ArrowLeft className="h-4 w-4" /> <span className="hidden sm:inline">Back to home</span>
       </Link>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="glass-card w-full max-w-md rounded-[2.5rem] p-10"
+        className="glass-card w-full max-w-md rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10"
       >
-        <div className="mb-10 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary glow-primary">
-            <Bot className="h-8 w-8 text-white" />
+        <div className="mb-8 md:mb-10 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-primary glow-primary">
+            <Bot className="h-7 w-7 md:h-8 md:w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Welcome back</h1>
-          <p className="mt-2 text-muted-foreground uppercase tracking-widest text-[10px] font-bold">
+          <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">Welcome back</h1>
+          <p className="mt-2 text-muted-foreground uppercase tracking-widest text-[9px] md:text-[10px] font-bold">
             SmartDev AI Platform
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
           {error && (
             <div className="rounded-lg bg-destructive/10 p-3 text-xs font-medium text-destructive">
               {error}
@@ -63,7 +63,7 @@ export default function LoginPage() {
           <Input
             label="Email Address"
             type="email"
-            placeholder="email"
+            placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -77,13 +77,13 @@ export default function LoginPage() {
             required
           />
 
-          <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center justify-between text-[11px] md:text-xs">
             <label className="flex items-center gap-2 text-muted-foreground cursor-pointer">
               <input type="checkbox" className="rounded border-border bg-white/5" />
               Remember me
             </label>
             <Link href="#" className="font-semibold text-primary hover:underline">
-              Forgot password?
+              Forgot?
             </Link>
           </div>
 

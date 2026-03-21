@@ -16,7 +16,8 @@ import {
     Search,
     Plus,
     Loader2,
-    Terminal
+    Terminal,
+    X
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -32,7 +33,17 @@ const menuItems = [
 ];
 
 
-export const Sidebar = ({ width, onResizeStart }: { width: number; onResizeStart: () => void }) => {
+export const Sidebar = ({ 
+    width, 
+    onResizeStart, 
+    isOpen, 
+    setIsOpen 
+}: { 
+    width: number; 
+    onResizeStart: () => void;
+    isOpen?: boolean;
+    setIsOpen?: (val: boolean) => void;
+}) => {
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -111,21 +122,31 @@ export const Sidebar = ({ width, onResizeStart }: { width: number; onResizeStart
 
     return (
         <aside 
-            className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-[#0D0D0D]/80 backdrop-blur-2xl transition-all overflow-hidden"
-            style={{ width }}
+            className="h-screen border-r border-border bg-[#0D0D0D] transition-all overflow-hidden md:bg-[#0D0D0D]/80 md:backdrop-blur-2xl shadow-2xl md:shadow-none"
+            style={{ width: typeof window !== 'undefined' && window.innerWidth < 768 ? '280px' : width }}
         >
             {/* Resize Handle */}
             <div 
-                className="absolute right-0 top-0 h-full w-1 cursor-col-resize hover:bg-primary/50 transition-colors z-50"
+                className="absolute right-0 top-0 hidden h-full w-1 cursor-col-resize hover:bg-primary/50 transition-colors z-50 md:block"
                 onMouseDown={onResizeStart}
             />
             <div className="flex h-full flex-col px-4 py-6">
-                {/* Brand */}
-                <div className="mb-8 flex items-center gap-3 px-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 text-primary glow-primary/30 border border-primary/20">
-                        <Zap className="h-6 w-6 fill-current" />
+                {/* Brand & Close */}
+                <div className="mb-8 flex items-center justify-between px-2">
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 text-primary glow-primary/30 border border-primary/20">
+                            <Zap className="h-6 w-6 fill-current" />
+                        </div>
+                        <span className="text-xl font-black tracking-tighter text-white italic uppercase">SmartDev<span className="text-primary">.OS</span></span>
                     </div>
-                    <span className="text-xl font-black tracking-tighter text-white italic uppercase">SmartDev<span className="text-primary">.OS</span></span>
+                    {setIsOpen && (
+                        <button 
+                            onClick={() => setIsOpen(false)}
+                            className="rounded-lg p-2 text-muted-foreground hover:bg-white/5 md:hidden"
+                        >
+                            <X className="h-6 w-6" />
+                        </button>
+                    )}
                 </div>
 
                 {/* Navigation */}
@@ -137,6 +158,7 @@ export const Sidebar = ({ width, onResizeStart }: { width: number; onResizeStart
                             <Link
                                 key={item.href}
                                 href={item.href}
+                                onClick={() => setIsOpen?.(false)}
                                 className={cn(
                                     "group relative flex items-center gap-3 rounded-xl px-3 py-3 text-xs font-bold transition-all duration-300",
                                     isActive
@@ -164,7 +186,7 @@ export const Sidebar = ({ width, onResizeStart }: { width: number; onResizeStart
                 <div className="flex-1 flex flex-col min-h-0">
                     <div className="flex items-center justify-between px-3 mb-4">
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">Memory Bank</p>
-                        <Link href="/dashboard/ai" className="p-1 rounded-lg hover:bg-white/5 text-muted-foreground hover:text-white transition-colors">
+                        <Link href="/dashboard/ai" onClick={() => setIsOpen?.(false)} className="p-1 rounded-lg hover:bg-white/5 text-muted-foreground hover:text-white transition-colors">
                             <Plus className="h-3.5 w-3.5" />
                         </Link>
                     </div>
@@ -194,6 +216,7 @@ export const Sidebar = ({ width, onResizeStart }: { width: number; onResizeStart
                                 <div key={chat._id} className="relative group">
                                     <Link
                                         href={`/dashboard/ai?id=${chat._id}`}
+                                        onClick={() => setIsOpen?.(false)}
                                         className={cn(
                                             "flex items-center gap-3 rounded-xl px-3 py-3.5 transition-all duration-300 border",
                                             activeConvId === chat._id

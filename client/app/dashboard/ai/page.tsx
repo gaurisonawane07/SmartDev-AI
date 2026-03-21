@@ -125,30 +125,30 @@ function ChatInterface() {
     };
 
     return (
-        <div className="flex h-screen overflow-hidden bg-black text-white">
+        <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] overflow-hidden bg-black text-white rounded-3xl md:m-4 border border-white/5">
             {/* AI Assistant (Chat) */}
             <div className="flex flex-1 flex-col relative z-10 glass-bg">
                 {/* Minimal Header */}
-                <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 shrink-0 bg-black/40 backdrop-blur-md">
+                <header className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/5 shrink-0 bg-black/40 backdrop-blur-md">
                     <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 bg-primary/20 rounded-xl flex items-center justify-center text-primary border border-primary/20 shadow-lg shadow-primary/10">
-                            <Bot className="h-5 w-5" />
+                        <div className="h-8 w-8 md:h-9 md:w-9 bg-primary/20 rounded-xl flex items-center justify-center text-primary border border-primary/20 shadow-lg shadow-primary/10">
+                            <Bot className="h-4 w-4 md:h-5 md:w-5" />
                         </div>
-                        <h1 className="text-sm font-black uppercase tracking-widest italic tracking-tighter">AI Assistant</h1>
+                        <h1 className="text-[10px] md:text-sm font-black uppercase tracking-widest italic tracking-tighter">AI Assistant</h1>
                     </div>
                     <button
                         onClick={handleNewChat}
-                        className="p-2 hover:bg-white/5 rounded-lg text-muted-foreground hover:text-white transition-all group"
+                        className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg text-muted-foreground hover:text-white transition-all group"
                         title="New Session"
                     >
-                        <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform" />
+                        <Plus className="h-3.5 w-3.5 md:h-4 md:w-4 group-hover:rotate-90 transition-transform" />
                     </button>
                 </header>
 
                 {/* Messages Panel */}
                 <div
                     ref={scrollRef}
-                    className="flex-1 overflow-y-auto space-y-8 p-6 custom-scrollbar"
+                    className="flex-1 overflow-y-auto space-y-6 md:space-y-8 p-4 md:p-6 custom-scrollbar"
                 >
                     <AnimatePresence initial={false}>
                         {messages.map((msg, i) => (
@@ -157,31 +157,31 @@ function ChatInterface() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className={cn(
-                                    "flex w-full gap-4",
+                                    "flex w-full gap-3 md:gap-4",
                                     msg.role === "user" ? "flex-row-reverse" : "flex-row"
                                 )}
                             >
                                 <div className={cn(
-                                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border",
+                                    "flex h-7 w-7 md:h-8 md:w-8 shrink-0 items-center justify-center rounded-lg border",
                                     msg.role === "user" 
                                         ? "bg-white/5 border-white/10 text-white/40" 
                                         : "bg-primary/20 border-primary/40 text-primary"
                                 )}>
-                                    {msg.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                                    {msg.role === "user" ? <User className="h-3.5 w-3.5 md:h-4 md:w-4" /> : <Bot className="h-3.5 w-3.5 md:h-4 md:w-4" />}
                                 </div>
 
                                 <div className={cn(
-                                    "flex flex-col gap-1.5 max-w-[85%]",
+                                    "flex flex-col gap-1.5 max-w-[90%] md:max-w-[85%]",
                                     msg.role === "user" ? "items-end" : "items-start"
                                 )}>
                                     <div className={cn(
-                                        "text-[14px] leading-relaxed text-white/90 font-medium",
+                                        "text-[13px] md:text-[14px] leading-relaxed text-white/90 font-medium",
                                         msg.role === "user" ? "text-right" : "text-left"
                                     )}>
                                         {msg.role === "user" ? (
                                             msg.content
                                         ) : (
-                                            <div className="prose prose-invert max-w-none prose-p:leading-relaxed prose-code:text-primary">
+                                            <div className="prose prose-invert max-w-none prose-p:leading-relaxed prose-code:text-primary prose-sm md:prose-base">
                                                 <ReactMarkdown
                                                     remarkPlugins={[remarkGfm]}
                                                     components={{
@@ -192,40 +192,40 @@ function ChatInterface() {
                                                             if (!inline && match) {
                                                                 return (
                                                                     <div className="group/code relative my-4 rounded-xl overflow-hidden border border-white/10 bg-[#0D0D0D]">
-                                                                        <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/5">
-                                                                            <span className="text-[9px] font-black uppercase text-primary/80 tracking-widest">{match[1]}</span>
+                                                                        <div className="flex items-center justify-between px-3 md:px-4 py-1.5 md:py-2 bg-white/5 border-b border-white/5">
+                                                                            <span className="text-[8px] md:text-[9px] font-black uppercase text-primary/80 tracking-widest">{match[1]}</span>
                                                                         </div>
-                                                                        <div className="p-4 overflow-x-auto text-[13px] font-mono opacity-80 whitespace-pre">
+                                                                        <div className="p-3 md:p-4 overflow-x-auto text-[11px] md:text-[13px] font-mono opacity-80 whitespace-pre">
                                                                             {codeValue}
                                                                         </div>
                                                                     </div>
                                                                 );
                                                             }
                                                             return (
-                                                                <code className={cn("bg-white/5 text-primary px-1.5 py-0.5 rounded font-mono text-[13px]", className)} {...props}>
+                                                                <code className={cn("bg-white/5 text-primary px-1.5 py-0.5 rounded font-mono text-[12px] md:text-[13px]", className)} {...props}>
                                                                     {children}
                                                                 </code>
                                                             );
                                                         },
-                                                        p: ({ children }) => <p className="mb-4 last:mb-0 opacity-80">{children}</p>,
+                                                        p: ({ children }) => <p className="mb-3 md:mb-4 last:mb-0 opacity-80">{children}</p>,
                                                     }}
                                                 >
                                                     {msg.content}
                                                 </ReactMarkdown>
                                                 
-                                                <div className="mt-4 flex items-center gap-3 pt-4 border-t border-white/5">
+                                                <div className="mt-3 md:mt-4 flex items-center gap-3 pt-3 md:pt-4 border-t border-white/5">
                                                     <button
                                                         onClick={() => handleSaveAsNote(msg.content)}
-                                                        className="text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-primary transition-colors flex items-center gap-1.5"
+                                                        className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-primary transition-colors flex items-center gap-1.5"
                                                     >
-                                                        <Save className="h-3 w-3" />
+                                                        <Save className="h-2.5 w-2.5 md:h-3 md:w-3" />
                                                         Save To Notes
                                                     </button>
                                                 </div>
                                             </div>
                                         )}
                                     </div>
-                                    <span className="text-[8px] font-black text-white/10 uppercase tracking-widest">
+                                    <span className="text-[7px] md:text-[8px] font-black text-white/10 uppercase tracking-widest">
                                         {mounted && new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>
@@ -235,13 +235,13 @@ function ChatInterface() {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="flex items-start gap-4"
+                                className="flex items-start gap-3 md:gap-4"
                             >
-                                <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                <div className="h-7 w-7 md:h-8 md:w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                                    <Loader2 className="h-3.5 w-3.5 md:h-4 md:w-4 animate-spin" />
                                 </div>
-                                <div className="flex items-center gap-2 h-8">
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary animate-pulse italic">Thinking...</span>
+                                <div className="flex items-center gap-2 h-7 md:h-8">
+                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-primary animate-pulse italic">Thinking...</span>
                                 </div>
                             </motion.div>
                         )}
@@ -249,12 +249,12 @@ function ChatInterface() {
                 </div>
 
                 {/* Input Area */}
-                <div className="p-4 bg-black/40 backdrop-blur-md border-t border-white/5">
-                    <div className="relative flex items-end gap-3 rounded-2xl bg-white/5 p-2 transition-all border border-transparent focus-within:border-primary/20">
+                <div className="p-3 md:p-4 bg-black/40 backdrop-blur-md border-t border-white/5">
+                    <div className="relative flex items-end gap-2 md:gap-3 rounded-2xl bg-white/5 p-1.5 md:p-2 transition-all border border-transparent focus-within:border-primary/20">
                         <textarea
                             rows={1}
                             placeholder="Ask or code anything..."
-                            className="flex-1 bg-transparent py-3 px-4 text-[13px] text-white focus:outline-none resize-none max-h-32 custom-scrollbar font-medium placeholder:text-white/20"
+                            className="flex-1 bg-transparent py-2 md:py-3 px-3 md:px-4 text-[12px] md:text-[13px] text-white focus:outline-none resize-none max-h-32 custom-scrollbar font-medium placeholder:text-white/20"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => {
@@ -268,13 +268,13 @@ function ChatInterface() {
                             onClick={handleSend}
                             disabled={!input.trim() || loading}
                             className={cn(
-                                "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all shadow-xl",
+                                "flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl transition-all shadow-xl",
                                 input.trim() && !loading
                                     ? "bg-primary text-white shadow-primary/20"
                                     : "bg-white/5 text-white/10 cursor-not-allowed"
                             )}
                         >
-                            <Send className="h-4 w-4" />
+                            <Send className="h-3.5 w-3.5 md:h-4 md:w-4" />
                         </button>
                     </div>
                 </div>

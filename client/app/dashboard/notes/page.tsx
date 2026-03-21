@@ -27,6 +27,7 @@ export default function NotesPage() {
     const [selectedNote, setSelectedNote] = useState<any>(null);
     const [editTitle, setEditTitle] = useState("");
     const [editContent, setEditContent] = useState("");
+    const [showMobileList, setShowMobileList] = useState(true);
 
     // Fetch notes on mount
     useEffect(() => {
@@ -39,7 +40,10 @@ export default function NotesPage() {
             const sortedData = Array.isArray(data) ? data : [];
             setNotes(sortedData);
             if (sortedData.length > 0 && !selectedNote) {
-                handleSelectNote(sortedData[0]);
+                // On desktop, select the first note by default
+                if (window.innerWidth >= 768) {
+                    handleSelectNote(sortedData[0]);
+                }
             }
         } catch (error) {
             console.error("Failed to fetch notes:", error);
@@ -53,6 +57,7 @@ export default function NotesPage() {
         setSelectedNote(note);
         setEditTitle(note.title || "");
         setEditContent(note.content || "");
+        setShowMobileList(false);
     };
 
     const handleCreateNote = async () => {
@@ -84,7 +89,6 @@ export default function NotesPage() {
                 content: editContent
             });
             
-            // Critical fix: Ensure we update the notes list with a consistent ID comparison
             setNotes(prev => prev.map(n => {
                 const noteId = n._id || n.id;
                 const updatedId = updated._id || updated.id;
@@ -116,6 +120,7 @@ export default function NotesPage() {
                     setSelectedNote(null);
                     setEditTitle("");
                     setEditContent("");
+                    setShowMobileList(true);
                 }
             }
         } catch (error: any) {
@@ -140,9 +145,12 @@ export default function NotesPage() {
     }
 
     return (
-        <div className="flex h-[calc(100vh-2rem)] flex-col gap-6 p-8">
+        <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] flex-col gap-4 md:gap-6 p-4 md:p-8">
             {/* Search & Actions Bar */}
-            <div className="flex items-center justify-between gap-4">
+            <div className={cn(
+                "flex items-center justify-between gap-4",
+                !showMobileList && "hidden md:flex"
+            )}>
                 <div className="relative flex-1 max-w-md">
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <input
@@ -159,14 +167,17 @@ export default function NotesPage() {
                         className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-primary/90 glow-primary shadow-lg shadow-primary/20"
                     >
                         <Plus className="h-4 w-4" />
-                        New Note
+                        <span className="hidden sm:inline">New Note</span>
                     </button>
                 </div>
             </div>
 
-            <div className="flex flex-1 gap-6 overflow-hidden">
+            <div className="flex flex-1 gap-6 overflow-hidden relative">
                 {/* Note List Sidebar */}
-                <div className="w-80 flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar">
+                <div className={cn(
+                    "w-full md:w-80 flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar transition-all duration-300",
+                    !showMobileList && "hidden md:flex"
+                )}>
                     {filteredNotes.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-muted-foreground px-6 text-center">
                             <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center mb-4">
@@ -178,7 +189,7 @@ export default function NotesPage() {
                         <AnimatePresence mode="popLayout">
                             {filteredNotes.map((note) => (
                                 <motion.div
-                                    key={note._id}
+                                    key={note._id || note.id}
                                     layout
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
@@ -202,7 +213,7 @@ export default function NotesPage() {
                                                 e.stopPropagation();
                                                 handleDeleteNote(note._id || note.id);
                                             }}
-                                            className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-all active:scale-90"
+                                            className="text-muted-foreground hover:text-destructive md:opacity-0 group-hover:opacity-100 transition-all active:scale-90"
                                         >
                                             <Trash2 className="h-4 w-4" />
                                         </button>
@@ -220,21 +231,34 @@ export default function NotesPage() {
                 </div>
 
                 {/* Note Editor Area */}
-                <div className="flex-1 rounded-3xl p-1 flex flex-col min-w-0">
+                <div className={cn(
+                    "flex-1 flex flex-col min-w-0 transition-all duration-300",
+                    showMobileList && "hidden md:flex"
+                )}>
                     {selectedNote ? (
                         <>
-                            <div className="mb-4 flex items-center justify-between px-2">
-                                <input
-                                    type="text"
-                                    value={editTitle}
-                                    onChange={(e) => setEditTitle(e.target.value)}
-                                    placeholder="Untitled Note"
-                                    className="flex-1 bg-transparent text-2xl font-bold text-white focus:outline-none placeholder:text-white/10"
-                                />
+                            <div className="mb-4 flex flex-col md:flex-row md:items-center md:justify-between px-2 gap-4">
+                                <div className="flex items-center gap-2">
+                                    <button 
+                                        onClick={() => setShowMobileList(true)}
+                                        className="p-2 -ml-2 text-muted-foreground hover:text-white md:hidden"
+                                    >
+                                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                    </button>
+                                    <input
+                                        type="text"
+                                        value={editTitle}
+                                        onChange={(e) => setEditTitle(e.target.value)}
+                                        placeholder="Untitled Note"
+                                        className="flex-1 bg-transparent text-xl md:text-2xl font-bold text-white focus:outline-none placeholder:text-white/10 min-w-0"
+                                    />
+                                </div>
                                 <button 
                                     onClick={handleSaveNote}
                                     disabled={saving}
-                                    className="flex items-center gap-2 rounded-xl bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-500 hover:bg-emerald-500/20 transition-all disabled:opacity-50 active:scale-95 border border-emerald-500/20"
+                                    className="flex items-center justify-center gap-2 rounded-xl bg-emerald-500/10 px-4 py-2.5 text-xs font-bold text-emerald-500 hover:bg-emerald-500/20 transition-all disabled:opacity-50 active:scale-95 border border-emerald-500/20 w-full md:w-auto md:py-2"
                                 >
                                     {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
                                     Commit Changes
@@ -249,19 +273,23 @@ export default function NotesPage() {
                             </div>
                         </>
                     ) : (
-                        <div className="flex-1 glass-card rounded-3xl flex flex-col items-center justify-center text-muted-foreground shadow-2xl">
+                        <div className="flex-1 glass-card rounded-3xl flex flex-col items-center justify-center text-muted-foreground shadow-2xl p-6">
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
+                                className="text-center"
                             >
-                                <FileText className="h-20 w-20 mb-6 opacity-10 mx-auto" />
-                                <p className="text-xl font-bold text-white mb-2 text-center tracking-tight">Technical Vault is Locked</p>
-                                <p className="text-sm opacity-60 text-center mb-8">Select an artifact from the left to begin documenting.</p>
+                                <FileText className="h-16 md:h-20 w-16 md:w-20 mb-6 opacity-10 mx-auto" />
+                                <p className="text-lg md:text-xl font-bold text-white mb-2 tracking-tight">Technical Vault is Locked</p>
+                                <p className="text-xs md:text-sm opacity-60 mb-8 max-w-[240px] md:max-w-none">Select an artifact from the list to begin documenting.</p>
                                 <button 
-                                    onClick={handleCreateNote}
+                                    onClick={() => {
+                                        if (typeof window !== 'undefined' && window.innerWidth < 768) setShowMobileList(true);
+                                        else handleCreateNote();
+                                    }}
                                     className="mx-auto block text-sm font-extrabold text-primary hover:text-primary/80 transition-all uppercase tracking-widest"
                                 >
-                                    Initialize New Artifact
+                                    {(typeof window !== 'undefined' && window.innerWidth < 768) ? "View Artifact List" : "Initialize New Artifact"}
                                 </button>
                             </motion.div>
                         </div>
@@ -271,5 +299,3 @@ export default function NotesPage() {
         </div>
     );
 }
-
-
