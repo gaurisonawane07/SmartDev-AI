@@ -26,12 +26,28 @@ export const chatWithAI = async (req, res) => {
         let chatSession;
         let messages = [];
 
+        // Define a higher-quality system prompt for the developer assistant
+        const SYSTEM_PROMPT = {
+            role: "system",
+            content: `You are SmartDev AI, a high-performance assistant for developers. 
+            - Provide code that is clean, documented, and production-ready.
+            - Use Markdown for responses (headers, tables, lists, and code blocks).
+            - When explaining concepts, be concise but thorough.
+            - Use your technical expertise to suggest best practices and optimizations.
+            - Format your output neatly so it can be easily read in a chat interface.`
+        };
+
         if (conversationId) {
             chatSession = await AIRequest.findOne({ _id: conversationId, user: req.user._id });
             if (!chatSession) {
                 return res.status(404).json({ success: false, message: "Conversation not found" });
             }
-            messages = chatSession.messages.map(m => ({ role: m.role, content: m.content }));
+            messages = [
+                SYSTEM_PROMPT,
+                ...chatSession.messages.map(m => ({ role: m.role, content: m.content }))
+            ];
+        } else {
+            messages = [SYSTEM_PROMPT];
         }
 
         messages.push({ role: "user", content: message });
@@ -56,7 +72,7 @@ export const chatWithAI = async (req, res) => {
                     { role: "assistant", content: aiResponse }
                 ],
                 tokensUsed,
-                model: "openai/gpt-oss-120b",
+                model: "llama-3.1-70b-versatile", // Using a high-quality model available on Groq
             });
         }
 
@@ -122,3 +138,29 @@ export const getConversation = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+export const deleteConversation = async (req, res) => {
+    try {
+        const conversation = await AIRequest.findOneAndDelete({
+            _id: req.params.id,
+            user: req.user._id
+        });
+
+        if (!conversation) {
+            return res.status(404).json({
+                success: false,
+                message: "Technical log not found or already purged."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Successfully purged technical log from the memory bank."
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to purge memory: " + error.message
+        });
+    }
+};

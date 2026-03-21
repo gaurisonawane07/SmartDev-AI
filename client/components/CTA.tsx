@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function CTA() {
     return (
         <section className="mx-auto max-w-5xl px-6 py-32 text-center">
-            <div className="rounded-[3rem] border border-white/5 bg-gradient-to-br from-zinc-900 via-zinc-950 to-primary/20 px-8 py-20 text-white shadow-2xl backdrop-blur-sm relative overflow-hidden group">
+            <div className="rounded-[3rem] border border-white/5 bg-linear-to-br from-zinc-900 via-zinc-950 to-primary/20 px-8 py-20 text-white shadow-2xl backdrop-blur-sm relative overflow-hidden group">
                 {/* Decorative Background Glows */}
                 <div className="absolute -top-24 -right-24 h-64 w-64 bg-primary/20 blur-[100px] pointer-events-none group-hover:bg-primary/30 transition-colors duration-500" />
                 <div className="absolute -bottom-24 -left-24 h-64 w-64 bg-purple-500/20 blur-[100px] pointer-events-none" />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Sidebar } from "@/components/Sidebar";
 
 export default function DashboardLayout({
@@ -9,14 +9,17 @@ export default function DashboardLayout({
     return (
         <div className="flex min-h-screen bg-background">
             {/* Sidebar - fixed on desktop */}
-            <Sidebar />
+            <Suspense fallback={<div className="w-72 h-screen bg-[#0D0D0D] border-r border-border animate-pulse" />}>
+                <Sidebar />
+            </Suspense>
 
             {/* Main Content Area */}
-            <main className="flex-1 pl-64 transition-all duration-300">
+            <main className="flex-1 pl-72 transition-all duration-300">
                 <div className="h-full min-h-screen border-l border-border bg-background/30 backdrop-blur-sm">
                     {children}
                 </div>
             </main>
+...
 
             {/* Background Glows */}
             <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">

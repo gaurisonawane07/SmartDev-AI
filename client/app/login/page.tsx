@@ -6,7 +6,7 @@ import { Bot, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input, Button } from "@/components/AuthUI";
-import { api } from "@/lib/api";
+import { authService } from "@/lib/services/authService";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
     try {
-      const response = await api.login({ email, password });
+      const response = await authService.login({ email, password });
       localStorage.setItem("token", response.token);
       router.push("/dashboard");
     } catch (err: any) {
@@ -63,7 +63,7 @@ export default function LoginPage() {
           <Input
             label="Email Address"
             type="email"
-            placeholder="name@company.com"
+            placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

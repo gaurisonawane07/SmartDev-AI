@@ -6,7 +6,7 @@ import { Bot, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input, Button } from "@/components/AuthUI";
-import { api } from "@/lib/api";
+import { authService } from "@/lib/services/authService";
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
@@ -21,7 +21,7 @@ export default function RegisterPage() {
         setLoading(true);
         setError("");
         try {
-            const response = await api.register({ name, email, password });
+            const response = await authService.register({ name, email, password });
             localStorage.setItem("token", response.token);
             router.push("/dashboard");
         } catch (err: any) {
@@ -64,7 +64,7 @@ export default function RegisterPage() {
                     <Input
                         label="Full Name"
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
@@ -72,7 +72,7 @@ export default function RegisterPage() {
                     <Input
                         label="Email Address"
                         type="email"
-                        placeholder="name@company.com"
+                        placeholder="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required

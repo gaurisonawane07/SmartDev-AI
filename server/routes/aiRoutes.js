@@ -5,7 +5,8 @@ import {
     chatWithAI,
     getHistory,
     getConversation,
-    saveResponseToNote
+    saveResponseToNote,
+    deleteConversation
 } from "../controllers/aiController.js";
 
 const router = express.Router();
@@ -16,6 +17,9 @@ router.get("/history", protect, getHistory);
 
 router.get("/conversation/:id", protect, getConversation);
 
+router.delete("/conversation/:id", protect, deleteConversation);
+
 router.post("/save-note", protect, saveResponseToNote);
+
 
 export default router;
