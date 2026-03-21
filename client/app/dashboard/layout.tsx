@@ -123,9 +123,6 @@ export default function DashboardLayout({
             {/* Main Content Area */}
             <main 
                 className={cn("flex-1 w-full", !isResizing && "transition-all duration-300")}
-                style={{ 
-                    paddingLeft: isDesktop ? sidebarWidth : 0 
-                }}
             >
                 <div className="h-full min-h-screen border-l border-border bg-background/30 backdrop-blur-sm">
                     {/* Mobile Header */}
