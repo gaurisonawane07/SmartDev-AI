@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input, Button } from "@/components/AuthUI";
 import { authService } from "@/lib/services/authService";
+import { setAuthToken } from "@/lib/authToken";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -21,7 +22,7 @@ export default function LoginPage() {
     setError("");
     try {
       const response = await authService.login({ email, password });
-      localStorage.setItem("token", response.token);
+      setAuthToken(response.token);
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Invalid email or password");

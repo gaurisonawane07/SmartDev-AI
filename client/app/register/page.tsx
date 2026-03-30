@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input, Button } from "@/components/AuthUI";
 import { authService } from "@/lib/services/authService";
+import { setAuthToken } from "@/lib/authToken";
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
@@ -22,7 +23,7 @@ export default function RegisterPage() {
         setError("");
         try {
             const response = await authService.register({ name, email, password });
-            localStorage.setItem("token", response.token);
+            setAuthToken(response.token);
             router.push("/dashboard");
         } catch (err: any) {
             setError(err.message || "Registration failed");

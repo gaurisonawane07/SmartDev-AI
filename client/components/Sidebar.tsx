@@ -23,6 +23,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { userService } from "@/lib/services/userService";
 import { aiService } from "@/lib/services/aiService";
+import { clearAuthToken, getAuthToken } from "@/lib/authToken";
 
 const menuItems = [
     { icon: LayoutDashboard, label: "Overview", href: "/dashboard" },
@@ -58,7 +59,7 @@ export const Sidebar = ({
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const token = getAuthToken();
                 if (token) {
                     const res = await userService.getProfile();
                     setUser(res.user);
@@ -68,7 +69,7 @@ export const Sidebar = ({
             } catch (error: any) {
                 console.error("Sidebar user fetch error:", error);
                 if (error.message.includes("401")) {
-                    localStorage.removeItem("token");
+                    clearAuthToken();
                     router.push("/login");
                 }
             }
@@ -92,7 +93,7 @@ export const Sidebar = ({
     }, [router]);
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
+        clearAuthToken();
         router.push("/login");
     };
 

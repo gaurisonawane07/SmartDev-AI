@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 import { userService } from "@/lib/services/userService";
 import { noteService } from "@/lib/services/noteService";
 import { aiService } from "@/lib/services/aiService";
+import { clearAuthToken, getAuthToken } from "@/lib/authToken";
 import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
@@ -27,7 +28,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = getAuthToken();
         if (!token) {
           router.push("/login");
           return;
@@ -45,7 +46,7 @@ export default function DashboardPage() {
       } catch (error: any) {
         console.error("Dashboard fetch error:", error);
         if (error.status === 401) {
-          localStorage.removeItem("token");
+          clearAuthToken();
           router.push("/login");
         }
       } finally {
