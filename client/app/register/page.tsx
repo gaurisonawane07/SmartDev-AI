@@ -43,7 +43,7 @@ export default function RegisterPage() {
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="glass-card w-full max-w-md rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10"
+                className="glass-card w-full max-w-md rounded-4xl md:rounded-[2.5rem] p-8 md:p-10"
             >
                 <div className="mb-8 md:mb-10 text-center">
                     <div className="mx-auto mb-4 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-primary glow-primary">

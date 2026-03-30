@@ -35,6 +35,8 @@ function ChatInterface() {
     const [conversationId, setConversationId] = useState<string | null>(null);
     const [mounted, setMounted] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const assistantMessageRefs = useRef<Record<number, HTMLDivElement | null>>({});
+    const shouldScrollToAnswerStartRef = useRef(false);
 
     useEffect(() => {
         setMounted(true);
@@ -49,12 +51,32 @@ function ChatInterface() {
         }
     }, [urlConversationId]);
 
-    // Auto scroll to bottom
+    // Keep the top of the new assistant answer in view instead of jumping to the end.
     useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        if (!shouldScrollToAnswerStartRef.current) return;
+
+        let lastAssistantIndex = -1;
+        for (let i = messages.length - 1; i >= 0; i -= 1) {
+            if (messages[i].role === "assistant") {
+                lastAssistantIndex = i;
+                break;
+            }
         }
-    }, [messages, loading]);
+
+        if (lastAssistantIndex === -1) return;
+
+        const container = scrollRef.current;
+        const targetMessage = assistantMessageRefs.current[lastAssistantIndex];
+
+        if (container && targetMessage) {
+            const topOffset = targetMessage.offsetTop - container.offsetTop;
+            container.scrollTo({
+                top: Math.max(0, topOffset - 12),
+                behavior: "smooth",
+            });
+            shouldScrollToAnswerStartRef.current = false;
+        }
+    }, [messages]);
 
     const handleLoadConversation = async (id: string) => {
         if (loading) return;
@@ -86,6 +108,7 @@ function ChatInterface() {
         setMessages(updatedMessages);
         setInput("");
         setLoading(true);
+        shouldScrollToAnswerStartRef.current = true;
 
         try {
             const response = await aiService.sendMessage(userMessage, conversationId || undefined);
@@ -154,6 +177,11 @@ function ChatInterface() {
                         {messages.map((msg, i) => (
                             <motion.div
                                 key={i}
+                                ref={(el) => {
+                                    if (msg.role === "assistant") {
+                                        assistantMessageRefs.current[i] = el;
+                                    }
+                                }}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className={cn(
