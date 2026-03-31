@@ -22,6 +22,23 @@ const aiRequestSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+        sources: [
+          {
+            noteId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Note",
+            },
+            chunkIndex: {
+              type: Number,
+            },
+            score: {
+              type: Number,
+            },
+            preview: {
+              type: String,
+            },
+          },
+        ],
         timestamp: {
           type: Date,
           default: Date.now,

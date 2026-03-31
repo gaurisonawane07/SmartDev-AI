@@ -26,6 +26,18 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  dailyAiUsageCount: {
+    type: Number,
+    default: 0,
+  },
+  dailyUsageDate: {
+    type: String,
+    default: "",
+  },
+  dailyRequestLimit: {
+    type: Number,
+    default: 50,
+  },
   monthlyRequestLimit: {
     type: Number,
     default: 50,

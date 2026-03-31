@@ -1,4 +1,5 @@
 import Note from "../models/note.model.js";
+import { indexNoteForRag, removeNoteFromRag } from "../services/rag/indexer.service.js";
 
 async function createNote(req, res) {
   try {
@@ -8,6 +9,17 @@ async function createNote(req, res) {
       content,
       user: req.user._id
     })
+
+    try {
+      await indexNoteForRag({
+        userId: req.user._id,
+        noteId: note._id,
+        noteContent: `${title}\n\n${content}`,
+      });
+    } catch (indexError) {
+      console.error("RAG indexing failed after create:", indexError.message);
+    }
+
     const noteObj = note.toObject();
     res.status(201).json({ ...noteObj, id: noteObj._id.toString() });
 
@@ -39,6 +51,17 @@ async function updateNote(req, res) {
     if (req.body.title !== undefined) note.title = req.body.title;
     if (req.body.content !== undefined) note.content = req.body.content;
     const updatedNote = await note.save();
+
+    try {
+      await indexNoteForRag({
+        userId: req.user._id,
+        noteId: updatedNote._id,
+        noteContent: `${updatedNote.title}\n\n${updatedNote.content}`,
+      });
+    } catch (indexError) {
+      console.error("RAG indexing failed after update:", indexError.message);
+    }
+
     const noteObj = updatedNote.toObject();
     res.status(200).json({ ...noteObj, id: noteObj._id.toString() });
 
@@ -60,6 +83,15 @@ async function deleteNote(req, res) {
     }
 
     await note.deleteOne();
+
+    try {
+      await removeNoteFromRag({
+        userId: req.user._id,
+        noteId: note._id,
+      });
+    } catch (indexError) {
+      console.error("RAG cleanup failed after delete:", indexError.message);
+    }
 
     res.status(200).json({ message: "Note deleted successfully" });
 

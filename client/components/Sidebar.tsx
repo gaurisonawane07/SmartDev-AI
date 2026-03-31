@@ -55,23 +55,32 @@ export const Sidebar = ({
     const [historyLoading, setHistoryLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [menuOpen, setMenuOpen] = useState<string | null>(null);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        const token = getAuthToken();
+
+        if (!token) {
+            setHistoryLoading(false);
+            router.push("/login");
+            return;
+        }
+
         const fetchUser = async () => {
             try {
-                const token = getAuthToken();
-                if (token) {
-                    const res = await userService.getProfile();
-                    setUser(res.user);
-                } else {
-                    router.push("/login");
-                }
+                const res = await userService.getProfile();
+                setUser(res.user);
             } catch (error: any) {
-                console.error("Sidebar user fetch error:", error);
-                if (error.message.includes("401")) {
+                if (error?.status === 401 || error?.message?.toLowerCase().includes("not authorized")) {
                     clearAuthToken();
                     router.push("/login");
+                    return;
                 }
+                console.error("Sidebar user fetch error:", error);
             }
         };
 
@@ -81,7 +90,12 @@ export const Sidebar = ({
                 if (res.success) {
                     setHistory(res.data);
                 }
-            } catch (error) {
+            } catch (error: any) {
+                if (error?.status === 401 || error?.message?.toLowerCase().includes("not authorized")) {
+                    clearAuthToken();
+                    router.push("/login");
+                    return;
+                }
                 console.error("Sidebar history fetch error:", error);
             } finally {
                 setHistoryLoading(false);
@@ -121,10 +135,13 @@ export const Sidebar = ({
         (chat.title || "Technical Session").toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const currentPath = mounted ? pathname : "";
+    const currentConversationId = mounted ? activeConvId : null;
+
     return (
         <aside 
             className="h-screen border-r border-border bg-[#0D0D0D] transition-all overflow-hidden md:bg-[#0D0D0D]/80 md:backdrop-blur-2xl shadow-2xl md:shadow-none"
-            style={{ width: typeof window !== 'undefined' && window.innerWidth < 768 ? '280px' : width }}
+            style={{ width }}
         >
             {/* Resize Handle */}
             <div 
@@ -154,7 +171,7 @@ export const Sidebar = ({
                 <nav className="space-y-1.5 mb-10">
                     <p className="px-3 mb-3 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">Navigation</p>
                     {menuItems.map((item) => {
-                        const isActive = pathname === item.href;
+                        const isActive = currentPath === item.href;
                         return (
                             <Link
                                 key={item.href}
@@ -220,13 +237,13 @@ export const Sidebar = ({
                                         onClick={() => setIsOpen?.(false)}
                                         className={cn(
                                             "flex items-center gap-3 rounded-xl px-3 py-3.5 transition-all duration-300 border",
-                                            activeConvId === chat._id
+                                            currentConversationId === chat._id
                                                 ? "bg-white/10 border-white/10 text-primary shadow-xl"
                                                 : "text-muted-foreground hover:bg-white/5 border-transparent hover:border-white/5"
                                         )}
                                     >
-                                        <MessageSquare className={cn("h-4 w-4 shrink-0", activeConvId === chat._id ? "text-primary" : "opacity-40")} />
-                                        <span className={cn("truncate text-xs font-bold", activeConvId === chat._id ? "text-white" : "")}>
+                                        <MessageSquare className={cn("h-4 w-4 shrink-0", currentConversationId === chat._id ? "text-primary" : "opacity-40")} />
+                                        <span className={cn("truncate text-xs font-bold", currentConversationId === chat._id ? "text-white" : "")}>
                                             {chat.title || "New Chat"}
                                         </span>
                                     </Link>

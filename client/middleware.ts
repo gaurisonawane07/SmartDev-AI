@@ -6,16 +6,11 @@ export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const isDashboardRoute = pathname.startsWith("/dashboard");
-    const isAuthRoute = pathname === "/login" || pathname === "/register";
 
     if (isDashboardRoute && !token) {
         const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("from", pathname);
         return NextResponse.redirect(loginUrl);
-    }
-
-    if (isAuthRoute && token) {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     return NextResponse.next();

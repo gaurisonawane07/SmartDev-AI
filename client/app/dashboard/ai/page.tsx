@@ -14,22 +14,36 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { aiService } from "@/lib/services/aiService";
 import { noteService } from "@/lib/services/noteService";
+import { clearAuthToken, getAuthToken } from "@/lib/authToken";
 import { useSearchParams, useRouter } from "next/navigation";
 
 // External Components
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+type MessageSource = {
+    noteId: string;
+    chunkIndex: number;
+    score: number;
+    preview: string;
+};
+
+type ChatMessage = {
+    role: "assistant" | "user" | "system";
+    content: string;
+    sources?: MessageSource[];
+};
+
 const initialMessages = [
     { role: "assistant", content: "Hello! I'm your AI Assistant. How can I help you with your code today?" },
-];
+] as ChatMessage[];
 
 function ChatInterface() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const urlConversationId = searchParams.get("id");
 
-    const [messages, setMessages] = useState(initialMessages);
+    const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [conversationId, setConversationId] = useState<string | null>(null);
@@ -87,7 +101,12 @@ function ChatInterface() {
                 setMessages(res.data.messages);
                 setConversationId(id);
             }
-        } catch (error) {
+        } catch (error: any) {
+            if (error?.status === 401 || error?.message?.toLowerCase().includes("not authorized")) {
+                clearAuthToken();
+                router.push("/login");
+                return;
+            }
             console.error("Failed to load conversation:", error);
         } finally {
             setLoading(false);
@@ -103,8 +122,16 @@ function ChatInterface() {
     const handleSend = async () => {
         if (!input.trim() || loading) return;
 
+        const token = getAuthToken();
+        if (!token) {
+            clearAuthToken();
+            router.push("/login");
+            return;
+        }
+
         const userMessage = input.trim();
-        const updatedMessages = [...messages, { role: "user", content: userMessage }];
+        const userChatMessage: ChatMessage = { role: "user", content: userMessage };
+        const updatedMessages = [...messages, userChatMessage];
         setMessages(updatedMessages);
         setInput("");
         setLoading(true);
@@ -116,7 +143,8 @@ function ChatInterface() {
             if (response.success) {
                 setMessages(prev => [...prev, {
                     role: "assistant",
-                    content: response.data
+                    content: response.data,
+                    sources: response.sources || [],
                 }]);
                 
                 if (!conversationId && response.conversationId) {
@@ -125,10 +153,17 @@ function ChatInterface() {
                 }
             }
         } catch (error: any) {
+            if (error?.status === 401 || error?.message?.toLowerCase().includes("not authorized")) {
+                clearAuthToken();
+                router.push("/login");
+                return;
+            }
+
             console.error("AI Chat Error:", error);
             setMessages(prev => [...prev, {
                 role: "assistant",
-                content: "Sorry, I encountered an error. " + (error.message || "Please try again later.")
+                content: "Sorry, I encountered an error. " + (error.message || "Please try again later."),
+                sources: [],
             }]);
         } finally {
             setLoading(false);
@@ -250,6 +285,29 @@ function ChatInterface() {
                                                         Save To Notes
                                                     </button>
                                                 </div>
+
+                                                {!!msg.sources?.length && (
+                                                    <div className="mt-3 rounded-lg border border-white/10 bg-white/3 p-2.5 md:p-3">
+                                                        <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-primary/80 mb-2">
+                                                            Related Notes
+                                                        </p>
+                                                        <div className="space-y-1.5">
+                                                            {msg.sources.map((source, sourceIndex) => (
+                                                                <div
+                                                                    key={`${source.noteId}-${source.chunkIndex}-${sourceIndex}`}
+                                                                    className="rounded-md border border-white/5 bg-black/30 px-2 py-1.5"
+                                                                >
+                                                                    <p className="text-[9px] md:text-[10px] text-white/70 font-semibold">
+                                                                        Note reference {sourceIndex + 1}
+                                                                    </p>
+                                                                    <p className="text-[10px] md:text-[11px] text-white/50 line-clamp-2">
+                                                                        {source.preview}
+                                                                    </p>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </div>

@@ -1,9 +1,34 @@
 const TOKEN_KEY = "token";
 const TOKEN_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
+function getCookieToken(): string | null {
+    if (typeof document === "undefined") return null;
+
+    const tokenPair = document.cookie
+        .split(";")
+        .map((cookie) => cookie.trim())
+        .find((cookie) => cookie.startsWith(`${TOKEN_KEY}=`));
+
+    if (!tokenPair) return null;
+
+    const value = tokenPair.slice(TOKEN_KEY.length + 1);
+    return value ? decodeURIComponent(value) : null;
+}
+
 export const getAuthToken = (): string | null => {
     if (typeof window === "undefined") return null;
-    return localStorage.getItem(TOKEN_KEY);
+
+    const localToken = localStorage.getItem(TOKEN_KEY);
+    if (localToken) return localToken;
+
+    const cookieToken = getCookieToken();
+    if (cookieToken) {
+        // Keep both storage locations synchronized for middleware + client API usage.
+        localStorage.setItem(TOKEN_KEY, cookieToken);
+        return cookieToken;
+    }
+
+    return null;
 };
 
 export const setAuthToken = (token: string): void => {
