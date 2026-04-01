@@ -212,8 +212,7 @@ export default function PlaygroundPage() {
                                 fontFamily: "var(--font-geist-mono), monospace",
                                 cursorStyle: "block",
                                 smoothScrolling: true,
-                                wordWrap: "on",
-                                border: "none"
+                                wordWrap: "on"
                             }}
                         />
                     </div>
