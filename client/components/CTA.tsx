@@ -4,28 +4,22 @@ import Link from "next/link";
 
 export default function CTA() {
     return (
-        <section className="mx-auto max-w-5xl px-6 py-20 md:py-32 text-center">
-            <div className="rounded-[2.5rem] md:rounded-[3rem] border border-white/5 bg-linear-to-br from-zinc-900 via-zinc-950 to-primary/20 px-6 py-12 md:px-8 md:py-20 text-white shadow-2xl backdrop-blur-sm relative overflow-hidden group">
-                {/* Decorative Background Glows */}
-                <div className="absolute -top-24 -right-24 h-64 w-64 bg-primary/20 blur-[100px] pointer-events-none group-hover:bg-primary/30 transition-colors duration-500" />
-                <div className="absolute -bottom-24 -left-24 h-64 w-64 bg-purple-500/20 blur-[100px] pointer-events-none" />
-
-                <div className="relative z-10">
-                    <h2 className="text-3xl font-extrabold md:text-6xl tracking-tight leading-[1.2]">
-                        Ready to elevate <br />
-                        <span className="text-gradient">your workflow?</span>
-                    </h2>
-                    <p className="mt-6 text-base md:text-lg text-zinc-400 max-w-xl mx-auto">
-                        Join the developer platform built for the modern era. Experience the power of AI-assisted coding and effortless notes.
-                    </p>
-                    <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-                        <Link
-                            href="/register"
-                            className="rounded-full bg-primary px-8 py-4 text-lg font-bold text-white transition-all hover:bg-primary/90 glow-primary active:scale-95"
-                        >
-                            Sign Up for Free
-                        </Link>
-                    </div>
+        <section className="bg-[#38bdf8] px-6 py-24 md:py-32 text-center overflow-hidden relative text-white">
+            <div className="absolute top-0 left-0 w-full h-full bg-grid opacity-10 pointer-events-none invert" />
+            <div className="mx-auto max-w-4xl px-4 text-center relative z-10">
+                <h2 className="text-4xl font-black md:text-7xl tracking-tighter leading-[1.0]">
+                    Deploy your <br /> next breakthrough.
+                </h2>
+                <p className="mt-8 text-lg md:text-xl text-sky-50 font-medium max-w-2xl mx-auto opacity-90">
+                    Join the ecosystem where technical insights meet ultra-agile development patterns.
+                </p>
+                <div className="mt-12">
+                    <Link
+                        href="/register"
+                        className="inline-flex rounded-lg bg-white px-12 py-6 text-xl font-black text-[#38bdf8] uppercase tracking-widest transition-all hover:bg-sky-50 hover:scale-105 active:scale-95 shadow-xl shadow-sky-900/10"
+                    >
+                        Initialize Now
+                    </Link>
                 </div>
             </div>
         </section>

@@ -46,7 +46,7 @@ const ToolbarButton = ({
     className={`p-2 rounded-lg transition-all ${
       isActive
         ? "bg-primary/20 text-primary shadow-inner"
-        : "text-muted-foreground hover:bg-muted/50 hover:text-white"
+        : "text-muted-foreground hover:bg-black/5 hover:text-foreground"
     }`}
   >
     {children}
@@ -71,7 +71,7 @@ export default function NoteEditor({ content, onChange }: NoteEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "prose prose-invert max-w-none focus:outline-none min-h-[400px] px-4 py-6 md:px-8 text-white",
+          "prose prose-slate max-w-none focus:outline-none min-h-[400px] px-4 py-6 md:px-8 text-foreground",
       },
     },
   });
@@ -88,7 +88,7 @@ export default function NoteEditor({ content, onChange }: NoteEditorProps) {
   return (
     <div className="flex flex-col h-full border border-border/50 rounded-2xl overflow-hidden bg-card/10 backdrop-blur-sm shadow-xl">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-1 p-3 border-b border-border/50 bg-muted/30">
+      <div className="flex flex-wrap items-center gap-1 p-3 border-b border-border bg-slate-50/50">
         <div className="flex items-center gap-1 pr-2 border-r border-border/50 mr-1">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBold().run()}
@@ -187,7 +187,7 @@ export default function NoteEditor({ content, onChange }: NoteEditorProps) {
       </div>
 
       {/* Editor Content */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar bg-card/20 hover:bg-card/40 transition-all p-2">
+      <div className="flex-1 overflow-y-auto custom-scrollbar bg-white/50 hover:bg-white transition-all p-2">
         <EditorContent editor={editor} />
       </div>
     </div>

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Input, Button } from "@/components/AuthUI";
 import { authService } from "@/lib/services/authService";
 import { setAuthToken } from "@/lib/authToken";
+import { validators } from "@/lib/validators";
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
@@ -15,12 +16,27 @@ export default function RegisterPage() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError("");
+        setFieldErrors({});
+
+        // Validate all fields
+        const validation = validators.validateRegistration({
+            name,
+            email,
+            password,
+        });
+
+        if (!validation.valid) {
+            setFieldErrors(validation.errors);
+            return;
+        }
+
+        setLoading(true);
         try {
             const response = await authService.register({ name, email, password });
             setAuthToken(response.token);
@@ -50,7 +66,7 @@ export default function RegisterPage() {
                     <div className="mx-auto mb-4 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-primary glow-primary">
                         <Bot className="h-7 w-7 md:h-8 md:w-8 text-white" />
                     </div>
-                    <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">Create Account</h1>
+                    <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight leading-tight">Create Account</h1>
                     <p className="mt-2 text-muted-foreground uppercase tracking-widest text-[9px] md:text-[10px] font-bold">
                         Join the SmartDev AI Community
                     </p>
@@ -62,33 +78,57 @@ export default function RegisterPage() {
                             {error}
                         </div>
                     )}
-                    <Input
-                        label="Full Name"
-                        type="text"
-                        placeholder="Your Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                    />
-                    <Input
-                        label="Email Address"
-                        type="email"
-                        placeholder="name@example.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <Input
-                        label="Password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+                    <div>
+                        <Input
+                            label="Full Name"
+                            type="text"
+                            placeholder="Your Name"
+                            value={name}
+                            onChange={(e) => {
+                                setName(e.target.value);
+                                setFieldErrors({ ...fieldErrors, name: "" });
+                            }}
+                            required
+                        />
+                        {fieldErrors.name && (
+                            <p className="text-xs text-destructive mt-1">{fieldErrors.name}</p>
+                        )}
+                    </div>
+                    <div>
+                        <Input
+                            label="Email Address"
+                            type="email"
+                            placeholder="name@example.com"
+                            value={email}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                setFieldErrors({ ...fieldErrors, email: "" });
+                            }}
+                            required
+                        />
+                        {fieldErrors.email && (
+                            <p className="text-xs text-destructive mt-1">{fieldErrors.email}</p>
+                        )}
+                    </div>
+                    <div>
+                        <Input
+                            label="Password"
+                            type="password"
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                setFieldErrors({ ...fieldErrors, password: "" });
+                            }}
+                            required
+                        />
+                        {fieldErrors.password && (
+                            <p className="text-xs text-destructive mt-1">{fieldErrors.password}</p>
+                        )}
+                    </div>
 
                     <p className="text-[10px] text-muted-foreground leading-relaxed">
-                        By signing up, you agree to our <span className="text-white hover:underline cursor-pointer">Terms</span> and <span className="text-white hover:underline cursor-pointer">Privacy</span>.
+                        By signing up, you agree to our <span className="text-primary hover:underline cursor-pointer">Terms</span> and <span className="text-primary hover:underline cursor-pointer">Privacy</span>.
                     </p>
 
                     <Button loading={loading}>Launch Your Workspace</Button>
@@ -96,7 +136,7 @@ export default function RegisterPage() {
 
                 <p className="mt-8 text-center text-sm text-muted-foreground">
                     Already have an account?{" "}
-                    <Link href="/login" className="font-bold text-white hover:text-primary transition-colors">
+                    <Link href="/login" className="font-bold text-primary hover:text-primary/80 transition-colors">
                         Sign In
                     </Link>
                 </p>

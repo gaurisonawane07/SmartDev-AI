@@ -8,18 +8,30 @@ import { useRouter } from "next/navigation";
 import { Input, Button } from "@/components/AuthUI";
 import { authService } from "@/lib/services/authService";
 import { setAuthToken } from "@/lib/authToken";
+import { validators } from "@/lib/validators";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
+    setFieldErrors({});
+
+    // Validate fields
+    const validation = validators.validateLogin({ email, password });
+
+    if (!validation.valid) {
+      setFieldErrors(validation.errors);
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await authService.login({ email, password });
       setAuthToken(response.token);
@@ -49,7 +61,7 @@ export default function LoginPage() {
           <div className="mx-auto mb-4 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-primary glow-primary">
             <Bot className="h-7 w-7 md:h-8 md:w-8 text-white" />
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight">Welcome back</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight leading-tight">Welcome back</h1>
           <p className="mt-2 text-muted-foreground uppercase tracking-widest text-[9px] md:text-[10px] font-bold">
             SmartDev AI Platform
           </p>
@@ -61,22 +73,38 @@ export default function LoginPage() {
               {error}
             </div>
           )}
-          <Input
-            label="Email Address"
-            type="email"
-            placeholder="name@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Input
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div>
+            <Input
+              label="Email Address"
+              type="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setFieldErrors({ ...fieldErrors, email: "" });
+              }}
+              required
+            />
+            {fieldErrors.email && (
+              <p className="text-xs text-destructive mt-1">{fieldErrors.email}</p>
+            )}
+          </div>
+          <div>
+            <Input
+              label="Password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setFieldErrors({ ...fieldErrors, password: "" });
+              }}
+              required
+            />
+            {fieldErrors.password && (
+              <p className="text-xs text-destructive mt-1">{fieldErrors.password}</p>
+            )}
+          </div>
 
           <div className="flex items-center justify-between text-[11px] md:text-xs">
             <label className="flex items-center gap-2 text-muted-foreground cursor-pointer">
@@ -93,7 +121,7 @@ export default function LoginPage() {
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-bold text-white hover:text-primary transition-colors">
+          <Link href="/register" className="font-bold text-primary hover:text-primary/80 transition-colors">
             Create account
           </Link>
         </p>

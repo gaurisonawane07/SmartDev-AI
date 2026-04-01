@@ -14,7 +14,7 @@ export function Input({ label, ...props }: InputProps) {
             <label className="text-sm font-medium text-muted-foreground">{label}</label>
             <input
                 {...props}
-                className="w-full rounded-xl border border-border bg-white/5 py-3 px-4 text-white transition-all focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                className="w-full rounded-xl border border-border bg-slate-50 py-3 px-4 text-foreground transition-all focus:border-primary focus:ring-1 focus:ring-primary outline-none placeholder:text-muted-foreground/30 shadow-inner"
             />
         </div>
     );

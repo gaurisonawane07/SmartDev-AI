@@ -2,26 +2,26 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #09090b; /* Deep Zinc 950 */
-  --foreground: #fafafa; /* Zinc 50 */
-  --card: #09090b;
-  --card-foreground: #fafafa;
-  --popover: #09090b;
-  --popover-foreground: #fafafa;
-  --primary: #3b82f6; /* Blue 500 */
+  --background: #ffffff;
+  --foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --primary: #38bdf8; /* Ultra-Light Pro Sky Blue */
   --primary-foreground: #ffffff;
-  --secondary: #27272a; /* Zinc 800 */
-  --secondary-foreground: #fafafa;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa; /* Zinc 400 */
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
+  --secondary: #f0f9ff;
+  --secondary-foreground: #38bdf8;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --accent: #f0f9ff;
+  --accent-foreground: #38bdf8;
   --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #3b82f6;
-  --radius: 0.75rem;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #38bdf8;
+  --radius: 0.5rem;
 }
 
 @theme inline {
@@ -58,32 +58,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Utilities for that "SaaS" Look */
+/* Custom Utilities for that "Lighter Blue Pro" Look */
 .glass-card {
-  background: rgba(24, 24, 27, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease-in-out;
 }
 
 .glass-card:hover {
-  background: rgba(24, 24, 27, 0.6);
-  border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+  background: #ffffff;
+  border-color: #0ea5e9;
+  box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.1);
 }
 
 .text-gradient {
-  background: linear-gradient(to bottom right, #ffffff, #a1a1aa);
+  background: linear-gradient(to bottom right, #111111, #0ea5e9);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .glow-primary {
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 20px rgba(14, 165, 233, 0.2); 
 }
 
-/* Grid Pattern Background */
+/* Precise Grid Background */
 .bg-grid {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
+  background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+  background-size: 24px 24px;
 }

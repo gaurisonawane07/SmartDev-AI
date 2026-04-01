@@ -10,7 +10,6 @@ export default function Navbar() {
 
     const navLinks = [
         { name: "Dashboard", href: "/dashboard" },
-        { name: "Sign In", href: "/login" },
     ];
 
     return (

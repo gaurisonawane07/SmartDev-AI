@@ -9,6 +9,8 @@ import {
     Plus,
     Save,
     ChevronRight,
+    Sun,
+    Moon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -47,6 +49,7 @@ function ChatInterface() {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [conversationId, setConversationId] = useState<string | null>(null);
+    const [isDarkMode, setIsDarkMode] = useState(true);
     const [mounted, setMounted] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const assistantMessageRefs = useRef<Record<number, HTMLDivElement | null>>({});
@@ -54,7 +57,15 @@ function ChatInterface() {
 
     useEffect(() => {
         setMounted(true);
+        const savedTheme = localStorage.getItem("ai-assistant-theme");
+        if (savedTheme) setIsDarkMode(savedTheme === "dark");
     }, []);
+
+    const toggleTheme = () => {
+        const newMode = !isDarkMode;
+        setIsDarkMode(newMode);
+        localStorage.setItem("ai-assistant-theme", newMode ? "dark" : "light");
+    };
 
     // Sync with URL ID
     useEffect(() => {
@@ -146,7 +157,7 @@ function ChatInterface() {
                     content: response.data,
                     sources: response.sources || [],
                 }]);
-                
+
                 if (!conversationId && response.conversationId) {
                     setConversationId(response.conversationId);
                     router.push(`/dashboard/ai?id=${response.conversationId}`);
@@ -182,25 +193,51 @@ function ChatInterface() {
         }
     };
 
+    if (!mounted) return null;
+
     return (
-        <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] overflow-hidden bg-black text-white rounded-3xl md:m-4 border border-white/5">
+        <div className={cn(
+            "flex h-[calc(100vh-4rem)] md:h-[calc(100vh-2rem)] overflow-hidden rounded-3xl md:m-4 border transition-colors duration-500",
+            isDarkMode ? "bg-black text-white border-white/5" : "bg-background text-foreground border-border"
+        )}>
             {/* AI Assistant (Chat) */}
-            <div className="flex flex-1 flex-col relative z-10 glass-bg">
+            <div className="flex flex-1 flex-col relative z-10 bg-transparent">
                 {/* Minimal Header */}
-                <header className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b border-white/5 shrink-0 bg-black/40 backdrop-blur-md">
+                <header className={cn(
+                    "flex items-center justify-between px-4 py-3 md:px-6 md:py-4 border-b shrink-0 backdrop-blur-md transition-colors",
+                    isDarkMode ? "bg-black/80 border-white/5" : "bg-background/80 border-border"
+                )}>
                     <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 md:h-9 md:w-9 bg-primary/20 rounded-xl flex items-center justify-center text-primary border border-primary/20 shadow-lg shadow-primary/10">
+                        <div className="h-8 w-8 md:h-9 md:w-9 bg-primary/10 rounded-xl flex items-center justify-center text-primary border border-primary/20">
                             <Bot className="h-4 w-4 md:h-5 md:w-5" />
                         </div>
-                        <h1 className="text-[10px] md:text-sm font-black uppercase tracking-widest italic tracking-tighter">AI Assistant</h1>
+                        <h1 className="text-[10px] md:text-sm font-black uppercase italic tracking-tighter">Neural Insight Assistant</h1>
                     </div>
-                    <button
-                        onClick={handleNewChat}
-                        className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg text-muted-foreground hover:text-white transition-all group"
-                        title="New Session"
-                    >
-                        <Plus className="h-3.5 w-3.5 md:h-4 md:w-4 group-hover:rotate-90 transition-transform" />
-                    </button>
+                    
+                    <div className="flex items-center gap-2 md:gap-4">
+                        {/* Day/Night Toggle */}
+                        <button 
+                            onClick={toggleTheme}
+                            className={cn(
+                                "p-1.5 md:p-2 rounded-lg transition-all active:scale-95",
+                                isDarkMode ? "hover:bg-white/5 text-yellow-500" : "hover:bg-black/5 text-slate-400"
+                            )}
+                            title={isDarkMode ? "Switch to Day Mode" : "Switch to Night Mode"}
+                        >
+                            {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                        </button>
+
+                        <button
+                            onClick={handleNewChat}
+                            className={cn(
+                                "flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all",
+                                isDarkMode ? "bg-white/5 text-white/50 hover:text-white" : "bg-slate-50 text-slate-500 hover:text-foreground"
+                            )}
+                        >
+                            <Plus className="h-3.5 w-3.5" />
+                            <span className="hidden md:inline">New Session</span>
+                        </button>
+                    </div>
                 </header>
 
                 {/* Messages Panel */}
@@ -225,10 +262,10 @@ function ChatInterface() {
                                 )}
                             >
                                 <div className={cn(
-                                    "flex h-7 w-7 md:h-8 md:w-8 shrink-0 items-center justify-center rounded-lg border",
-                                    msg.role === "user" 
-                                        ? "bg-white/5 border-white/10 text-white/40" 
-                                        : "bg-primary/20 border-primary/40 text-primary"
+                                    "flex h-7 w-7 md:h-8 md:w-8 shrink-0 items-center justify-center rounded-lg border transition-colors",
+                                    msg.role === "user"
+                                        ? (isDarkMode ? "bg-white/5 border-white/10 text-white/20" : "bg-slate-50 border-slate-200 text-slate-400")
+                                        : "bg-primary/10 border-primary/20 text-primary"
                                 )}>
                                     {msg.role === "user" ? <User className="h-3.5 w-3.5 md:h-4 md:w-4" /> : <Bot className="h-3.5 w-3.5 md:h-4 md:w-4" />}
                                 </div>
@@ -238,69 +275,92 @@ function ChatInterface() {
                                     msg.role === "user" ? "items-end" : "items-start"
                                 )}>
                                     <div className={cn(
-                                        "text-[13px] md:text-[14px] leading-relaxed text-white/90 font-medium",
-                                        msg.role === "user" ? "text-right" : "text-left"
+                                        "text-[13px] md:text-[14px] leading-relaxed font-medium p-4 rounded-2xl transition-all",
+                                        msg.role === "user" 
+                                            ? (isDarkMode ? "bg-white/5 text-white/70 rounded-tr-none border border-white/5" : "bg-slate-50 text-slate-700 rounded-tr-none border border-slate-200") 
+                                            : (isDarkMode ? "bg-[#111111] text-white/90 rounded-tl-none border border-white/5 shadow-2xl" : "bg-white text-foreground rounded-tl-none border border-border shadow-sm shadow-black/5")
                                     )}>
                                         {msg.role === "user" ? (
                                             msg.content
                                         ) : (
-                                            <div className="prose prose-invert max-w-none prose-p:leading-relaxed prose-code:text-primary prose-sm md:prose-base">
+                                            <div className={cn(
+                                                "prose max-w-none prose-p:leading-relaxed prose-code:text-primary prose-sm md:prose-base font-medium",
+                                                isDarkMode ? "prose-invert" : "prose-slate"
+                                            )}>
                                                 <ReactMarkdown
                                                     remarkPlugins={[remarkGfm]}
                                                     components={{
                                                         code({ node, inline, className, children, ...props }: any) {
                                                             const match = /language-(\w+)/.exec(className || "");
                                                             const codeValue = String(children).replace(/\n$/, "");
-                                                            
+
                                                             if (!inline && match) {
                                                                 return (
-                                                                    <div className="group/code relative my-4 rounded-xl overflow-hidden border border-white/10 bg-[#0D0D0D]">
+                                                                    <div className={cn(
+                                                                        "group/code relative my-4 rounded-xl overflow-hidden border transition-colors",
+                                                                        isDarkMode ? "bg-black border-white/5" : "bg-[#0D0D0D] border-border"
+                                                                    )}>
                                                                         <div className="flex items-center justify-between px-3 md:px-4 py-1.5 md:py-2 bg-white/5 border-b border-white/5">
-                                                                            <span className="text-[8px] md:text-[9px] font-black uppercase text-primary/80 tracking-widest">{match[1]}</span>
+                                                                            <span className="text-[8px] md:text-[9px] font-black uppercase text-primary tracking-widest">{match[1]}</span>
                                                                         </div>
-                                                                        <div className="p-3 md:p-4 overflow-x-auto text-[11px] md:text-[13px] font-mono opacity-80 whitespace-pre">
+                                                                        <div className="p-3 md:p-4 overflow-x-auto text-[11px] md:text-[13px] font-mono text-white/80 whitespace-pre">
                                                                             {codeValue}
                                                                         </div>
                                                                     </div>
                                                                 );
                                                             }
                                                             return (
-                                                                <code className={cn("bg-white/5 text-primary px-1.5 py-0.5 rounded font-mono text-[12px] md:text-[13px]", className)} {...props}>
+                                                                <code className={cn("bg-primary/5 text-primary px-1.5 py-0.5 rounded font-mono text-[12px] md:text-[13px]", className)} {...props}>
                                                                     {children}
                                                                 </code>
                                                             );
                                                         },
-                                                        p: ({ children }) => <p className="mb-3 md:mb-4 last:mb-0 opacity-80">{children}</p>,
+                                                        p: ({ children }) => <p className={cn("mb-3 md:mb-4 last:mb-0", isDarkMode ? "text-white/70" : "text-foreground/80")}>{children}</p>,
                                                     }}
                                                 >
                                                     {msg.content}
                                                 </ReactMarkdown>
-                                                
-                                                <div className="mt-3 md:mt-4 flex items-center gap-3 pt-3 md:pt-4 border-t border-white/5">
+
+                                                <div className={cn("mt-3 md:mt-4 flex items-center gap-3 pt-3 md:pt-4 border-t", isDarkMode ? "border-white/5" : "border-border")}>
                                                     <button
                                                         onClick={() => handleSaveAsNote(msg.content)}
-                                                        className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-primary transition-colors flex items-center gap-1.5"
+                                                        className={cn(
+                                                            "text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-colors flex items-center gap-1.5",
+                                                            isDarkMode ? "text-white/20 hover:text-primary" : "text-muted-foreground hover:text-primary"
+                                                        )}
                                                     >
                                                         <Save className="h-2.5 w-2.5 md:h-3 md:w-3" />
-                                                        Save To Notes
+                                                        Commit To Notes
                                                     </button>
                                                 </div>
 
                                                 {!!msg.sources?.length && (
-                                                    <div className="mt-3 rounded-lg border border-white/10 bg-white/3 p-2.5 md:p-3">
-                                                        <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-primary/80 mb-2">
-                                                            Related Notes
+                                                    <div className={cn(
+                                                        "mt-3 rounded-lg border p-2.5 md:p-3 transition-colors",
+                                                        isDarkMode ? "bg-white/[0.02] border-white/5" : "bg-slate-50/50 border-border"
+                                                    )}>
+                                                        <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-primary mb-2">
+                                                            Knowledge Sources
                                                         </p>
                                                         <div className="space-y-1.5">
                                                             {msg.sources.map((source, sourceIndex) => (
                                                                 <div
                                                                     key={`${source.noteId}-${source.chunkIndex}-${sourceIndex}`}
-                                                                    className="rounded-md border border-white/5 bg-black/30 px-2 py-1.5"
+                                                                    className={cn(
+                                                                        "rounded-md border px-2 py-1.5 shadow-sm transition-colors",
+                                                                        isDarkMode ? "bg-black border-white/5" : "bg-white border-border"
+                                                                    )}
                                                                 >
-                                                                    <p className="text-[9px] md:text-[10px] text-white/70 font-semibold">
-                                                                        Note reference {sourceIndex + 1}
+                                                                    <p className={cn(
+                                                                        "text-[9px] md:text-[10px] font-semibold uppercase",
+                                                                        isDarkMode ? "text-white/40" : "text-foreground/70"
+                                                                    )}>
+                                                                        Reference {sourceIndex + 1}
                                                                     </p>
-                                                                    <p className="text-[10px] md:text-[11px] text-white/50 line-clamp-2">
+                                                                    <p className={cn(
+                                                                        "text-[10px] md:text-[11px] line-clamp-2",
+                                                                        isDarkMode ? "text-white/20" : "text-muted-foreground"
+                                                                    )}>
                                                                         {source.preview}
                                                                     </p>
                                                                 </div>
@@ -311,7 +371,10 @@ function ChatInterface() {
                                             </div>
                                         )}
                                     </div>
-                                    <span className="text-[7px] md:text-[8px] font-black text-white/10 uppercase tracking-widest">
+                                    <span className={cn(
+                                        "text-[7px] md:text-[8px] font-black uppercase tracking-widest px-1",
+                                        isDarkMode ? "text-white/10" : "text-slate-300"
+                                    )}>
                                         {mounted && new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>
@@ -327,7 +390,7 @@ function ChatInterface() {
                                     <Loader2 className="h-3.5 w-3.5 md:h-4 md:w-4 animate-spin" />
                                 </div>
                                 <div className="flex items-center gap-2 h-7 md:h-8">
-                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-primary animate-pulse italic">Thinking...</span>
+                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-primary animate-pulse italic">Compiling context...</span>
                                 </div>
                             </motion.div>
                         )}
@@ -335,12 +398,20 @@ function ChatInterface() {
                 </div>
 
                 {/* Input Area */}
-                <div className="p-3 md:p-4 bg-black/40 backdrop-blur-md border-t border-white/5">
-                    <div className="relative flex items-end gap-2 md:gap-3 rounded-2xl bg-white/5 p-1.5 md:p-2 transition-all border border-transparent focus-within:border-primary/20">
+                <div className={cn("p-3 md:p-4 border-t transition-colors", isDarkMode ? "bg-black border-white/5" : "bg-background border-border")}>
+                    <div className={cn(
+                        "relative flex items-end gap-2 md:gap-3 rounded-2xl p-1.5 md:p-2 transition-all border",
+                        isDarkMode 
+                            ? "bg-white/[0.02] border-white/5 focus-within:border-primary/40 focus-within:bg-white/[0.04]" 
+                            : "bg-slate-50 border-border focus-within:border-primary focus-within:bg-white focus-within:shadow-xl focus-within:shadow-primary/5"
+                    )}>
                         <textarea
                             rows={1}
-                            placeholder="Ask or code anything..."
-                            className="flex-1 bg-transparent py-2 md:py-3 px-3 md:px-4 text-[12px] md:text-[13px] text-white focus:outline-none resize-none max-h-32 custom-scrollbar font-medium placeholder:text-white/20"
+                            placeholder="Type architectural queries or code fragments..."
+                            className={cn(
+                                "flex-1 bg-transparent py-2 md:py-3 px-3 md:px-4 text-[12px] md:text-[13px] focus:outline-none resize-none max-h-32 custom-scrollbar font-medium transition-colors",
+                                isDarkMode ? "text-white placeholder:text-white/10" : "text-foreground placeholder:text-muted-foreground/40"
+                            )}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={(e) => {
@@ -354,10 +425,10 @@ function ChatInterface() {
                             onClick={handleSend}
                             disabled={!input.trim() || loading}
                             className={cn(
-                                "flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl transition-all shadow-xl",
+                                "flex h-9 w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl transition-all",
                                 input.trim() && !loading
-                                    ? "bg-primary text-white shadow-primary/20"
-                                    : "bg-white/5 text-white/10 cursor-not-allowed"
+                                    ? "bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105 active:scale-95"
+                                    : (isDarkMode ? "bg-white/5 text-white/10" : "bg-slate-200 text-slate-400 cursor-not-allowed")
                             )}
                         >
                             <Send className="h-3.5 w-3.5 md:h-4 md:w-4" />

@@ -156,7 +156,7 @@ export default function NotesPage() {
                     <input
                         type="text"
                         placeholder="Search notes..."
-                        className="w-full rounded-xl border border-border bg-card/30 py-2.5 pl-10 pr-4 text-sm text-white focus:border-primary focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-border bg-slate-50 py-2.5 pl-10 pr-4 text-sm text-foreground focus:border-primary focus:outline-none transition-all placeholder:text-muted-foreground/30"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -198,13 +198,13 @@ export default function NotesPage() {
                                         "group cursor-pointer rounded-2xl border p-4 transition-all duration-300",
                                         selectedNote?._id === note._id
                                             ? "border-primary/50 bg-primary/10 shadow-lg shadow-primary/5"
-                                            : "border-border bg-card/10 hover:border-white/10 hover:bg-white/5"
+                                            : "border-border bg-slate-50/50 hover:border-primary/20 hover:bg-white"
                                     )}
                                 >
                                     <div className="mb-2 flex items-start justify-between">
                                         <h4 className={cn(
-                                            "line-clamp-1 text-sm font-semibold transition-colors",
-                                            selectedNote?._id === note._id ? "text-primary" : "text-white"
+                                            "line-clamp-1 text-sm font-bold transition-colors",
+                                            selectedNote?._id === note._id ? "text-primary" : "text-foreground"
                                         )}>
                                             {note.title}
                                         </h4>
@@ -218,10 +218,10 @@ export default function NotesPage() {
                                             <Trash2 className="h-4 w-4" />
                                         </button>
                                     </div>
-                                    <p className="mb-4 line-clamp-2 text-[11px] text-muted-foreground/60 leading-relaxed font-medium">
+                                    <p className="mb-4 line-clamp-2 text-[11px] text-muted-foreground leading-relaxed font-medium">
                                         {note.content ? note.content.replace(/<[^>]*>/g, '').substring(0, 100) : "Blank artifact"}
                                     </p>
-                                    <div className="flex items-center justify-between text-[10px] text-muted-foreground/40 font-bold uppercase tracking-widest">
+                                    <div className="flex items-center justify-between text-[10px] text-muted-foreground font-black uppercase tracking-widest opacity-40">
                                         <span>{new Date(note.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
                                     </div>
                                 </motion.div>
@@ -252,7 +252,7 @@ export default function NotesPage() {
                                         value={editTitle}
                                         onChange={(e) => setEditTitle(e.target.value)}
                                         placeholder="Untitled Note"
-                                        className="flex-1 bg-transparent text-xl md:text-2xl font-bold text-white focus:outline-none placeholder:text-white/10 min-w-0"
+                                        className="flex-1 bg-transparent text-xl md:text-2xl font-bold text-foreground focus:outline-none placeholder:text-muted-foreground/20 min-w-0"
                                     />
                                 </div>
                                 <button 
@@ -280,8 +280,8 @@ export default function NotesPage() {
                                 className="text-center"
                             >
                                 <FileText className="h-16 md:h-20 w-16 md:w-20 mb-6 opacity-10 mx-auto" />
-                                <p className="text-lg md:text-xl font-bold text-white mb-2 tracking-tight">Technical Vault is Locked</p>
-                                <p className="text-xs md:text-sm opacity-60 mb-8 max-w-[240px] md:max-w-none">Select an artifact from the list to begin documenting.</p>
+                                <p className="text-lg md:text-xl font-bold text-foreground mb-2 tracking-tight">Technical Vault is Locked</p>
+                                <p className="text-xs md:text-sm text-muted-foreground mb-8 max-w-[240px] md:max-w-none">Select an artifact from the list to begin documenting.</p>
                                 <button 
                                     onClick={() => {
                                         if (typeof window !== 'undefined' && window.innerWidth < 768) setShowMobileList(true);

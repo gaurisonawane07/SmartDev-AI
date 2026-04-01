@@ -5,13 +5,14 @@ import { Sidebar } from "@/components/Sidebar";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { Bot } from "lucide-react";
 
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const [sidebarWidth, setSidebarWidth] = useState(288);
+    const [sidebarWidth, setSidebarWidth] = useState(320);
     const [isResizing, setIsResizing] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [isDesktop, setIsDesktop] = useState(true);
@@ -91,9 +92,9 @@ export default function DashboardLayout({
                             animate={{ x: 0 }}
                             exit={{ x: "-100%" }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="fixed inset-y-0 left-0 z-[60] md:relative md:translate-x-0"
+                            className="fixed inset-y-0 left-0 z-60 md:relative md:translate-x-0"
                         >
-                             <Suspense fallback={<div className="h-screen bg-[#0D0D0D] border-r border-border animate-pulse" style={{ width: 280 }} />}>
+                             <Suspense fallback={<div className="h-screen bg-background border-r border-border animate-pulse" style={{ width: 280 }} />}>
                                 <Sidebar 
                                     width={sidebarWidth} 
                                     onResizeStart={startResizing} 
@@ -109,7 +110,7 @@ export default function DashboardLayout({
             {/* Desktop Sidebar (hidden on mobile when closed) */}
             {isDesktop && (
                 <div className="hidden md:block">
-                    <Suspense fallback={<div className="h-screen bg-[#0D0D0D] border-r border-border animate-pulse" style={{ width: sidebarWidth }} />}>
+                    <Suspense fallback={<div className="h-screen bg-background border-r border-border animate-pulse" style={{ width: sidebarWidth }} />}>
                         <Sidebar 
                             width={sidebarWidth} 
                             onResizeStart={startResizing} 
@@ -130,13 +131,13 @@ export default function DashboardLayout({
                         <div className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/50 bg-background/80 px-4 backdrop-blur-md">
                             <div className="flex items-center gap-2">
                                 <div className="rounded-lg bg-primary/20 p-1.5 text-primary border border-primary/20">
-                                    <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5-10-5-10 5z"/></svg> 
+                                    <Bot className="h-5 w-5" /> 
                                 </div>
-                                <span className="text-sm font-black uppercase tracking-tighter">SmartDev<span className="text-primary">.OS</span></span>
+                                <span className="text-sm font-black uppercase tracking-tighter text-foreground">SmartDev<span className="text-primary">.OS</span></span>
                             </div>
                             <button 
                                 onClick={() => setIsMobileOpen(!isMobileOpen)}
-                                className="rounded-lg p-2 text-white bg-primary/10 border border-primary/20 active:scale-90 transition-all shadow-lg shadow-primary/10"
+                                className="rounded-lg p-2 text-primary bg-primary/10 border border-primary/20 active:scale-90 transition-all shadow-lg shadow-primary/10"
                             >
                                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
