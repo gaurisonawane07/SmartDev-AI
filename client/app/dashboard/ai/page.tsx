@@ -8,9 +8,7 @@ import {
     Loader2,
     Plus,
     Save,
-    ChevronRight,
-    Sun,
-    Moon
+    ChevronRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -18,6 +16,7 @@ import { aiService } from "@/lib/services/aiService";
 import { noteService } from "@/lib/services/noteService";
 import { clearAuthToken, getAuthToken } from "@/lib/authToken";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 // External Components
 import ReactMarkdown from "react-markdown";
@@ -49,23 +48,11 @@ function ChatInterface() {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [conversationId, setConversationId] = useState<string | null>(null);
-    const [isDarkMode, setIsDarkMode] = useState(true);
-    const [mounted, setMounted] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const assistantMessageRefs = useRef<Record<number, HTMLDivElement | null>>({});
     const shouldScrollToAnswerStartRef = useRef(false);
-
-    useEffect(() => {
-        setMounted(true);
-        const savedTheme = localStorage.getItem("ai-assistant-theme");
-        if (savedTheme) setIsDarkMode(savedTheme === "dark");
-    }, []);
-
-    const toggleTheme = () => {
-        const newMode = !isDarkMode;
-        setIsDarkMode(newMode);
-        localStorage.setItem("ai-assistant-theme", newMode ? "dark" : "light");
-    };
+    const { resolvedTheme } = useTheme();
+    const isDarkMode = resolvedTheme !== "light";
 
     // Sync with URL ID
     useEffect(() => {
@@ -193,7 +180,7 @@ function ChatInterface() {
         }
     };
 
-    if (!mounted) return null;
+    if (!resolvedTheme) return null;
 
     return (
         <div className={cn(
@@ -211,22 +198,10 @@ function ChatInterface() {
                         <div className="h-8 w-8 md:h-9 md:w-9 bg-primary/10 rounded-xl flex items-center justify-center text-primary border border-primary/20">
                             <Bot className="h-4 w-4 md:h-5 md:w-5" />
                         </div>
-                        <h1 className="text-[10px] md:text-sm font-black uppercase italic tracking-tighter">Neural Insight Assistant</h1>
+                        <h1 className="text-[10px] md:text-sm font-black uppercase italic tracking-tighter">AI Help</h1>
                     </div>
                     
                     <div className="flex items-center gap-2 md:gap-4">
-                        {/* Day/Night Toggle */}
-                        <button 
-                            onClick={toggleTheme}
-                            className={cn(
-                                "p-1.5 md:p-2 rounded-lg transition-all active:scale-95",
-                                isDarkMode ? "hover:bg-white/5 text-yellow-500" : "hover:bg-black/5 text-slate-400"
-                            )}
-                            title={isDarkMode ? "Switch to Day Mode" : "Switch to Night Mode"}
-                        >
-                            {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                        </button>
-
                         <button
                             onClick={handleNewChat}
                             className={cn(
@@ -235,7 +210,7 @@ function ChatInterface() {
                             )}
                         >
                             <Plus className="h-3.5 w-3.5" />
-                            <span className="hidden md:inline">New Session</span>
+                            <span className="hidden md:inline">New Chat</span>
                         </button>
                     </div>
                 </header>
@@ -330,17 +305,17 @@ function ChatInterface() {
                                                         )}
                                                     >
                                                         <Save className="h-2.5 w-2.5 md:h-3 md:w-3" />
-                                                        Commit To Notes
+                                                        Save To Notes
                                                     </button>
                                                 </div>
 
                                                 {!!msg.sources?.length && (
                                                     <div className={cn(
                                                         "mt-3 rounded-lg border p-2.5 md:p-3 transition-colors",
-                                                        isDarkMode ? "bg-white/[0.02] border-white/5" : "bg-slate-50/50 border-border"
+                                                        isDarkMode ? "bg-white/2 border-white/5" : "bg-slate-50/50 border-border"
                                                     )}>
                                                         <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-primary mb-2">
-                                                            Knowledge Sources
+                                                            Found Info
                                                         </p>
                                                         <div className="space-y-1.5">
                                                             {msg.sources.map((source, sourceIndex) => (
@@ -375,7 +350,7 @@ function ChatInterface() {
                                         "text-[7px] md:text-[8px] font-black uppercase tracking-widest px-1",
                                         isDarkMode ? "text-white/10" : "text-slate-300"
                                     )}>
-                                        {mounted && new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>
                             </motion.div>
@@ -390,7 +365,7 @@ function ChatInterface() {
                                     <Loader2 className="h-3.5 w-3.5 md:h-4 md:w-4 animate-spin" />
                                 </div>
                                 <div className="flex items-center gap-2 h-7 md:h-8">
-                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-primary animate-pulse italic">Compiling context...</span>
+                                    <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-primary animate-pulse italic">Thinking...</span>
                                 </div>
                             </motion.div>
                         )}
@@ -402,12 +377,12 @@ function ChatInterface() {
                     <div className={cn(
                         "relative flex items-end gap-2 md:gap-3 rounded-2xl p-1.5 md:p-2 transition-all border",
                         isDarkMode 
-                            ? "bg-white/[0.02] border-white/5 focus-within:border-primary/40 focus-within:bg-white/[0.04]" 
+                            ? "bg-white/2 border-white/5 focus-within:border-primary/40 focus-within:bg-white/4" 
                             : "bg-slate-50 border-border focus-within:border-primary focus-within:bg-white focus-within:shadow-xl focus-within:shadow-primary/5"
                     )}>
                         <textarea
                             rows={1}
-                            placeholder="Type architectural queries or code fragments..."
+                            placeholder="Type your message or code here..."
                             className={cn(
                                 "flex-1 bg-transparent py-2 md:py-3 px-3 md:px-4 text-[12px] md:text-[13px] focus:outline-none resize-none max-h-32 custom-scrollbar font-medium transition-colors",
                                 isDarkMode ? "text-white placeholder:text-white/10" : "text-foreground placeholder:text-muted-foreground/40"

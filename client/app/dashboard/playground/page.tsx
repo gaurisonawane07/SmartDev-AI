@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { 
     Terminal, 
     Play, 
@@ -14,13 +14,12 @@ import {
     Copy,
     Save,
     Plus,
-    Loader2,
-    Sun,
-    Moon
+    Loader2
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 const languages = [
     { label: "JavaScript", value: "javascript", icon: "js" },
@@ -36,20 +35,8 @@ export default function PlaygroundPage() {
     const [output, setOutput] = useState<any[]>([]);
     const [isRunning, setIsRunning] = useState(false);
     const [langMenuOpen, setLangMenuOpen] = useState(false);
-    const [isDarkMode, setIsDarkMode] = useState(true);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-        const savedTheme = localStorage.getItem("playground-theme");
-        if (savedTheme) setIsDarkMode(savedTheme === "dark");
-    }, []);
-
-    const toggleTheme = () => {
-        const newMode = !isDarkMode;
-        setIsDarkMode(newMode);
-        localStorage.setItem("playground-theme", newMode ? "dark" : "light");
-    };
+    const { resolvedTheme } = useTheme();
+    const isDarkMode = resolvedTheme !== "light";
 
     const runCode = () => {
         setIsRunning(true);
@@ -87,7 +74,7 @@ export default function PlaygroundPage() {
 
     const clearConsole = () => setOutput([]);
 
-    if (!mounted) return null;
+    if (!resolvedTheme) return null;
 
     return (
         <div className={cn(
@@ -96,10 +83,10 @@ export default function PlaygroundPage() {
         )}>
             {/* Header / Toolbar */}
             <header className={cn(
-                "flex h-20 shrink-0 items-center justify-between px-8 border rounded-t-[2rem] relative transition-colors",
+                "flex h-20 shrink-0 items-center justify-between px-8 border rounded-t-4xl relative transition-colors",
                 isDarkMode ? "bg-[#0D0D0D] border-white/5" : "bg-white border-slate-200 shadow-sm"
             )}>
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
+                <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-transparent via-primary to-transparent opacity-50" />
                 
                 <div className="flex items-center gap-6">
                     <div className="h-10 w-10 flex items-center justify-center bg-primary/10 rounded-2xl border border-primary/20 text-primary shadow-xl shadow-primary/10">
@@ -115,24 +102,12 @@ export default function PlaygroundPage() {
                 </div>
 
                 <div className="flex items-center gap-6 relative z-50">
-                    {/* Day/Night Toggle */}
-                    <button 
-                        onClick={toggleTheme}
-                        className={cn(
-                            "flex items-center justify-center h-11 w-11 rounded-xl border transition-all active:scale-95 shadow-sm",
-                            isDarkMode ? "bg-white/5 border-white/10 text-yellow-400 hover:bg-white/10" : "bg-slate-50 border-slate-200 text-slate-400 hover:bg-white hover:text-primary"
-                        )}
-                        title={isDarkMode ? "Switch to Day Mode" : "Switch to Night Mode"}
-                    >
-                        {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                    </button>
-
                     {/* Language Selector */}
                     <div className="relative">
                         <button 
                             onClick={() => setLangMenuOpen(!langMenuOpen)}
                             className={cn(
-                                "flex items-center gap-3 h-11 px-6 rounded-xl border text-[10px] font-black uppercase tracking-[0.2em] transition-all min-w-[160px] shadow-sm",
+                                "flex items-center gap-3 h-11 px-6 rounded-xl border text-[10px] font-black uppercase tracking-[0.2em] transition-all min-w-40 shadow-sm",
                                 isDarkMode ? "bg-white/5 border-white/10 text-white/50" : "bg-slate-50 border-slate-200 text-slate-500"
                             )}
                         >
@@ -193,7 +168,7 @@ export default function PlaygroundPage() {
             <div className="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden">
                 {/* Editor Container */}
                 <div className={cn(
-                    "flex-1 flex flex-col border-x border-b rounded-b-[2rem] overflow-hidden relative shadow-sm",
+                    "flex-1 flex flex-col border-x border-b rounded-b-4xl overflow-hidden relative shadow-sm",
                     isDarkMode ? "bg-[#0D0D0D] border-white/5" : "bg-white border-slate-200"
                 )}>
                     <div className="flex-1">
@@ -221,7 +196,7 @@ export default function PlaygroundPage() {
                 {/* System Output Console */}
                 <div className="w-full lg:w-[35%] flex flex-col gap-6">
                     <div className={cn(
-                        "flex-1 border rounded-[2rem] p-6 flex flex-col shadow-sm relative transition-all",
+                        "flex-1 border rounded-4xl p-6 flex flex-col shadow-sm relative transition-all",
                         isDarkMode ? "bg-[#0D0D0D] border-white/5" : "bg-white border-slate-200"
                     )}>
                         <div className="flex items-center justify-between mb-8 shrink-0">
@@ -271,7 +246,7 @@ export default function PlaygroundPage() {
 
                     {/* Node Status */}
                     <div className={cn(
-                        "h-32 border rounded-[2rem] p-6 flex flex-col justify-center gap-3",
+                        "h-32 border rounded-4xl p-6 flex flex-col justify-center gap-3",
                         isDarkMode ? "bg-[#0D0D0D] border-white/5" : "bg-white border-slate-200 shadow-sm"
                     )}>
                         <div className="flex items-center justify-between">

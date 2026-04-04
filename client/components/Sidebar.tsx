@@ -257,12 +257,12 @@ export const Sidebar = ({
                                         <AnimatePresence>
                                             {menuOpen === chat._id && (
                                                 <>
-                                                    <div className="fixed inset-0 z-[100]" onClick={() => setMenuOpen(null)} />
+                                                    <div className="fixed inset-0 z-100" onClick={() => setMenuOpen(null)} />
                                                     <motion.div
                                                         initial={{ opacity: 0, scale: 0.9, x: 5 }}
                                                         animate={{ opacity: 1, scale: 1, x: 0 }}
                                                         exit={{ opacity: 0, scale: 0.9, x: 5 }}
-                                                        className="absolute right-0 top-8 w-32 bg-white border border-border rounded-xl shadow-2xl z-[101] p-1 font-bold overflow-hidden"
+                                                        className="absolute right-0 top-8 w-32 bg-white border border-border rounded-xl shadow-2xl z-101 p-1 font-bold overflow-hidden"
                                                     >
                                                         <button
                                                             onClick={(e) => handleDeleteChat(e, chat._id)}
@@ -285,7 +285,7 @@ export const Sidebar = ({
                 {/* Bottom Section */}
                 <div className="mt-8 border-t border-border pt-6 bg-background">
                     <div className="mb-4 flex items-center gap-3 px-3">
-                        <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-primary to-purple-600 shadow-lg shadow-primary/20 flex items-center justify-center text-[10px] font-black text-white">
+                        <div className="h-9 w-9 rounded-2xl bg-linear-to-br from-primary to-purple-600 shadow-lg shadow-primary/20 flex items-center justify-center text-[10px] font-black text-white">
                             {user?.name?.charAt(0) || "U"}
                         </div>
                         <div className="flex flex-col overflow-hidden">

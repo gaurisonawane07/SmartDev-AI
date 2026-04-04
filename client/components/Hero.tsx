@@ -8,7 +8,7 @@ export default function Hero() {
     return (
         <section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-24 text-center overflow-hidden md:pt-32">
             {/* Ultra-Light Sky Blue Glows */}
-            <div className="absolute top-1/4 -z-10 h-[200px] w-[300px] rounded-full bg-sky-300/10 blur-[100px] md:h-[300px] md:w-[500px] md:blur-[120px]" />
+            <div className="absolute top-1/4 -z-10 h-50 w-75 rounded-full bg-sky-300/10 blur-[100px] md:h-75 md:w-125 md:blur-[120px]" />
 
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
@@ -22,7 +22,7 @@ export default function Hero() {
             </motion.div>
 
             <motion.h1
-                className="max-w-4xl text-4xl font-black leading-[1.1] tracking-tighter text-[#111111] md:text-8xl md:leading-[1.0]"
+                className="max-w-4xl text-4xl font-black leading-[1.1] tracking-tighter text-[#111111] md:text-8xl md:leading-none"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}

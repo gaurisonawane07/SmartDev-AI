@@ -97,7 +97,7 @@ export default function DashboardPage() {
       <div className="flex h-[80vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-            <p className="text-sm text-muted-foreground animate-pulse font-medium">Synchronizing workspace...</p>
+            <p className="text-sm text-muted-foreground animate-pulse font-medium">Loading your work...</p>
         </div>
       </div>
     );
@@ -116,7 +116,7 @@ export default function DashboardPage() {
           </h1>
           <p className="mt-1 text-xs text-muted-foreground flex items-center gap-2 md:text-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            Sync complete • Workspace active
+            Ready to use
           </p>
         </motion.div>
         <button 
@@ -156,11 +156,11 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Recent Activity */}
         <div className="lg:col-span-2 space-y-6">
-          <section className="glass-card rounded-2xl overflow-hidden min-h-[400px] border border-border">
+          <section className="glass-card rounded-2xl overflow-hidden min-h-100 border border-border">
             <div className="border-b border-border bg-muted/30 px-6 py-5 flex items-center justify-between">
               <h3 className="font-semibold text-foreground flex items-center gap-2">
                 <FileText className="h-4 w-4 text-primary" />
-                Recent Artifacts
+                Recent notes
               </h3>
               <button 
                 onClick={() => router.push("/dashboard/notes")}
@@ -171,17 +171,17 @@ export default function DashboardPage() {
             </div>
             <div className="divide-y divide-border/50">
               {notes.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 text-muted-foreground px-6 text-center">
+                <div className="flex flex-col items-center justify-center py-24 text-primary px-6 text-center">
                   <div className="h-16 w-16 rounded-full bg-secondary/30 flex items-center justify-center mb-6">
                     <FileText className="h-8 w-8 opacity-20" />
                   </div>
-                  <h4 className="text-foreground font-medium mb-1">No artifacts found in vault</h4>
-                  <p className="text-sm max-w-[280px] mx-auto opacity-60">Synchronize your thoughts by creating your first technical note.</p>
+                  <h4 className="text-foreground font-medium mb-1">No notes found</h4>
+                  <p className="text-sm max-w-70 mx-auto opacity-60">Write your first note to get started.</p>
                   <button 
                     onClick={() => router.push("/dashboard/notes")}
                     className="mt-8 rounded-lg border border-primary/20 bg-primary/5 px-6 py-2 text-sm font-bold text-primary hover:bg-primary/10 transition-all"
                   >
-                    + Initialize First Note
+                    + Create First Note
                   </button>
                 </div>
               ) : (
@@ -189,15 +189,15 @@ export default function DashboardPage() {
                   <div 
                     key={note._id} 
                     onClick={() => router.push("/dashboard/notes")}
-                    className="flex items-center justify-between px-6 py-4 hover:bg-white/[0.03] cursor-pointer transition-colors group"
+                    className="flex items-center justify-between px-6 py-4 hover:bg-white/3 cursor-pointer transition-colors group"
                   >
                     <div className="flex items-center gap-4">
                       <div className="h-10 w-10 rounded-xl bg-secondary/50 flex items-center justify-center text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary transition-colors border border-white/5">
                         <FileText className="h-5 w-5" />
                       </div>
                       <div>
-                        <h4 className="text-base font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">{note.title}</h4>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black mt-0.5 opacity-60">
+                        <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">{note.title}</h4>
+                        <p className="text-[9px] text-muted-foreground uppercase tracking-[0.18em] font-semibold mt-0.5 opacity-70">
                           Updated • {new Date(note.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                         </p>
                       </div>
@@ -217,26 +217,26 @@ export default function DashboardPage() {
               <div className="rounded-lg bg-primary/10 p-2 text-primary shadow-inner shadow-primary/10">
                 <Sparkles className="h-5 w-5" />
               </div>
-              <h3 className="font-black text-foreground tracking-tight uppercase text-xs">System Insight</h3>
+              <h3 className="font-black text-foreground tracking-tight uppercase text-xs">AI Tips</h3>
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground font-medium">
                 {notes.length > 0 ? (
-                    `Based on your focus on "${notes[0].title}", SmartDev AI recommends reviewing server-side caching patterns for this architecture.`
+                    `Since you're working on "${notes[0].title}", SmartDev AI thinks you should check server-side caching for this setup.`
                 ) : (
-                    "Analyzing development patterns... Create notes to receive personalized architectural insights and ecosystem trends."
+                    "Looking at your work... Write notes to get tips and see what's trending."
                 )}
             </p>
             <button 
                 onClick={() => router.push("/dashboard/ai")}
                 className="mt-6 w-full rounded-xl bg-primary/10 py-3 text-center text-[11px] font-extrabold text-primary transition-all hover:bg-primary/20 active:scale-95 border border-primary/20 uppercase tracking-widest"
             >
-              Consult Assistant
+              Ask AI
             </button>
           </section>
 
           <section className="glass-card rounded-2xl p-6 bg-linear-to-br from-indigo-500/5 to-purple-500/5 border border-indigo-500/10">
             <header className="flex items-center justify-between mb-3">
-                <h3 className="font-black text-foreground text-[10px] uppercase tracking-widest text-indigo-400">Compute usage</h3>
+                <h3 className="font-black text-[10px] uppercase tracking-widest text-indigo-400">Usage</h3>
                 <span className="text-[10px] font-black text-foreground bg-indigo-500/10 px-2 py-0.5 rounded-full">{Math.round(((user?.aiUsageCount || 0) / (user?.monthlyRequestLimit || 50)) * 100)}%</span>
             </header>
             <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden mb-4">
@@ -247,7 +247,7 @@ export default function DashboardPage() {
                 />
             </div>
             <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-tight opacity-60">
-              {(user?.monthlyRequestLimit || 50) - (user?.aiUsageCount || 0)} operations remaining in current cycle.
+              {(user?.monthlyRequestLimit || 50) - (user?.aiUsageCount || 0)} messages left this month.
             </p>
           </section>
         </div>
