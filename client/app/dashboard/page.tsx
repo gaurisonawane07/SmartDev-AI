@@ -8,7 +8,6 @@ import {
   ArrowRight,
   TrendingUp,
   Plus,
-  Sparkles,
   ChevronRight
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -213,10 +212,7 @@ export default function DashboardPage() {
         {/* AI Sidebar */}
         <div className="space-y-6">
           <section className="glass-card rounded-2xl p-6 border-l-4 border-l-primary bg-linear-to-b from-primary/5 to-transparent border-white/5 shadow-xl">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="rounded-lg bg-primary/10 p-2 text-primary shadow-inner shadow-primary/10">
-                <Sparkles className="h-5 w-5" />
-              </div>
+            <div className="mb-4">
               <h3 className="font-black text-foreground tracking-tight uppercase text-xs">AI Tips</h3>
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground font-medium">
