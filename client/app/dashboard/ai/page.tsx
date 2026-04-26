@@ -195,9 +195,11 @@ function ChatInterface() {
                     isDarkMode ? "bg-black/80 border-white/5" : "bg-background/80 border-border"
                 )}>
                     <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 md:h-9 md:w-9 bg-primary/10 rounded-xl flex items-center justify-center text-primary border border-primary/20">
-                            <Bot className="h-4 w-4 md:h-5 md:w-5" />
-                        </div>
+                        <img 
+                            src="/logo.png" 
+                            alt="SmartDev AI Logo" 
+                            className="h-20 w-auto object-contain"
+                        />
                         <h1 className="text-[10px] md:text-sm font-black uppercase italic tracking-tighter">AI Help</h1>
                     </div>
                     
@@ -242,7 +244,7 @@ function ChatInterface() {
                                         ? (isDarkMode ? "bg-white/5 border-white/10 text-white/20" : "bg-slate-50 border-slate-200 text-slate-400")
                                         : "bg-primary/10 border-primary/20 text-primary"
                                 )}>
-                                    {msg.role === "user" ? <User className="h-3.5 w-3.5 md:h-4 md:w-4" /> : <Bot className="h-3.5 w-3.5 md:h-4 md:w-4" />}
+                                    {msg.role === "user" ? <User className="h-3.5 w-3.5 md:h-4 md:w-4" /> : <img src="/logo.png" alt="AI" className="h-4 w-4 object-contain" />}
                                 </div>
 
                                 <div className={cn(

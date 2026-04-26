@@ -2,8 +2,8 @@
 
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import FeatureGrid from "@/components/FeatureGrid";
-import TrustSection from "@/components/TrustSection";
+import Workflow from "@/components/Workflow";
+import KeyFeatures from "@/components/KeyFeatures";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
@@ -13,8 +13,8 @@ export default function LandingPage() {
       <Navbar />
       <main>
         <Hero />
-        <FeatureGrid />
-        <TrustSection />
+        <Workflow />
+        <KeyFeatures />
         <CTA />
       </main>
       <Footer />

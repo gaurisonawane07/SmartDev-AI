@@ -151,12 +151,13 @@ export const Sidebar = ({
             <div className="flex h-full flex-col px-4 py-6">
                 {/* Brand & Close */}
                 <div className="mb-8 flex items-center justify-between px-2">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 text-primary glow-primary/30 border border-primary/20">
-                            <Zap className="h-6 w-6 fill-current" />
-                        </div>
-                        <span className="text-xl font-black tracking-tighter text-foreground italic uppercase">SmartDev<span className="text-primary">.OS</span></span>
-                    </div>
+                    <Link href="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                        <img 
+                            src="/logo.png" 
+                            alt="SmartDev AI Logo" 
+                            className="h-32 w-auto object-contain -ml-2"
+                        />
+                    </Link>
                     {setIsOpen && (
                         <button
                             onClick={() => setIsOpen(false)}

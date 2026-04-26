@@ -4,6 +4,7 @@ import React, { Suspense, useState, useCallback, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot } from "lucide-react";
 
@@ -129,12 +130,13 @@ export default function DashboardLayout({
                     {/* Mobile Header */}
                     {!isDesktop && (
                         <div className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border/50 bg-background/80 px-4 backdrop-blur-md">
-                            <div className="flex items-center gap-2">
-                                <div className="rounded-lg bg-primary/20 p-1.5 text-primary border border-primary/20">
-                                    <Bot className="h-5 w-5" /> 
-                                </div>
-                                <span className="text-sm font-black uppercase tracking-tighter text-foreground">SmartDev<span className="text-primary">.OS</span></span>
-                            </div>
+                            <Link href="/dashboard" className="flex items-center gap-2">
+                                <img 
+                                    src="/logo.png" 
+                                    alt="SmartDev AI Logo" 
+                                    className="h-20 w-auto object-contain"
+                                />
+                            </Link>
                             <button 
                                 onClick={() => setIsMobileOpen(!isMobileOpen)}
                                 className="rounded-lg p-2 text-primary bg-primary/10 border border-primary/20 active:scale-90 transition-all shadow-lg shadow-primary/10"

@@ -17,10 +17,11 @@ export default function Navbar() {
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
-                    <div className="rounded-lg bg-primary p-1.5 glow-primary">
-                        <Bot className="h-5 w-5 text-white" />
-                    </div>
-                    <span className="text-xl font-bold tracking-tight">SmartDev AI</span>
+                    <img 
+                        src="/logo.png" 
+                        alt="SmartDev AI Logo" 
+                        className="h-28 w-auto object-contain -my-4"
+                    />
                 </Link>
 
                 {/* Desktop Navigation */}
@@ -34,6 +35,12 @@ export default function Navbar() {
                             {link.name}
                         </Link>
                     ))}
+                    <Link 
+                        href="/login" 
+                        className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                        Login
+                    </Link>
                     <Link
                         href="/register"
                         className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary/90 hover:glow-primary"
@@ -71,6 +78,13 @@ export default function Navbar() {
                                     {link.name}
                                 </Link>
                             ))}
+                            <Link
+                                href="/login"
+                                onClick={() => setIsOpen(false)}
+                                className="text-lg font-medium text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                                Login
+                            </Link>
                             <Link
                                 href="/register"
                                 onClick={() => setIsOpen(false)}

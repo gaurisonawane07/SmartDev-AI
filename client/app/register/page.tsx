@@ -63,9 +63,11 @@ export default function RegisterPage() {
                 className="glass-card w-full max-w-md rounded-4xl md:rounded-[2.5rem] p-8 md:p-10"
             >
                 <div className="mb-8 md:mb-10 text-center">
-                    <div className="mx-auto mb-4 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-2xl bg-primary glow-primary">
-                        <Bot className="h-7 w-7 md:h-8 md:w-8 text-white" />
-                    </div>
+                    <img 
+                        src="/logo.png" 
+                        alt="SmartDev AI Logo" 
+                        className="mx-auto mb-4 h-48 w-auto object-contain"
+                    />
                     <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight leading-tight">Create Account</h1>
                     <p className="mt-2 text-muted-foreground uppercase tracking-widest text-[9px] md:text-[10px] font-bold">
                         Join the SmartDev AI Community
