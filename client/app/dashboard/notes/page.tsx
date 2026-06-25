@@ -16,6 +16,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { noteService } from "@/lib/services/noteService";
+import { toast } from "sonner";
 
 import NoteEditor from "@/components/NoteEditor";
 
@@ -68,16 +69,17 @@ export default function NotesPage() {
             });
             setNotes(prev => [newNote, ...prev]);
             handleSelectNote(newNote);
+            toast.success("New note created.");
         } catch (error) {
             console.error("Failed to create note:", error);
-            alert("Could not create note. Please check your connection.");
+            toast.error("Could not create note. Please check your connection.");
         }
     };
 
     const handleSaveNote = async () => {
         const id = selectedNote?._id || selectedNote?.id;
         if (!id) {
-            alert("Critical Error: Missing Note ID. Try refreshing.");
+            toast.error("Critical Error: Missing Note ID. Try refreshing.");
             return;
         }
         if (saving) return;
@@ -96,10 +98,10 @@ export default function NotesPage() {
             }));
             
             setSelectedNote(updated);
-            alert("Note saved successfully!");
+            toast.success("Note saved successfully!");
         } catch (error: any) {
             console.error("Failed to save note:", error);
-            alert(`Failed to save: ${error.message}`);
+            toast.error(`Failed to save: ${error.message}`);
         } finally {
             setSaving(false);
         }
@@ -123,9 +125,10 @@ export default function NotesPage() {
                     setShowMobileList(true);
                 }
             }
+            toast.success("Note deleted.");
         } catch (error: any) {
             console.error("Failed to delete note:", error);
-            alert(`Error: ${error.message || "Failed to delete"}`);
+            toast.error(`Error: ${error.message || "Failed to delete"}`);
         }
     };
 

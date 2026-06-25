@@ -17,6 +17,7 @@ import { noteService } from "@/lib/services/noteService";
 import { clearAuthToken, getAuthToken } from "@/lib/authToken";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { toast } from "sonner";
 
 // External Components
 import ReactMarkdown from "react-markdown";
@@ -168,15 +169,15 @@ function ChatInterface() {
         }
     };
 
-    const handleSaveAsNote = (content: string) => {
+    const handleSaveAsNote = async (content: string) => {
         try {
-            noteService.create({
+            await noteService.create({
                 title: "AI Snippet: " + new Date().toLocaleDateString(),
                 content: content
             });
-            alert("Successfully saved to your dev notes!");
+            toast.success("Successfully saved to your dev notes!");
         } catch (error) {
-            alert("Failed to save snippet.");
+            toast.error("Failed to save snippet.");
         }
     };
 

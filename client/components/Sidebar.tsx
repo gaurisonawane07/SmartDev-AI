@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { userService } from "@/lib/services/userService";
 import { aiService } from "@/lib/services/aiService";
 import { clearAuthToken, getAuthToken } from "@/lib/authToken";
+import { toast } from "sonner";
 
 const menuItems = [
     { icon: LayoutDashboard, label: "Overview", href: "/dashboard" },
@@ -124,10 +125,11 @@ export const Sidebar = ({
                 if (activeConvId === id) {
                     router.push("/dashboard/ai");
                 }
+                toast.success("Technical log deleted.");
             }
         } catch (error) {
             console.error("Delete chat error:", error);
-            alert("Could not delete log.");
+            toast.error("Could not delete log.");
         }
     };
 
