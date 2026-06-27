@@ -30,7 +30,7 @@ const languages = [
 ];
 
 export default function PlaygroundPage() {
-    const [code, setCode] = useState("// SmartDev Console v1.0\n// Write your script here and click Run.\n\nconst greet = () => {\n  console.log('Synchronizing Neural Link...');\n  console.log('Hello, SmartDev User!');\n};\n\ngreet();");
+    const [code, setCode] = useState("// SmartDev Console v1.0\n// Write your script here and click Run.\n\nconst greet = () => {\n  console.log('Starting up...');\n  console.log('Hello, SmartDev User!');\n};\n\ngreet();");
     const [language, setLanguage] = useState("javascript");
     const [output, setOutput] = useState<any[]>([]);
     const [isRunning, setIsRunning] = useState(false);
@@ -93,11 +93,11 @@ export default function PlaygroundPage() {
                         <Terminal className="h-5 w-5" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-black uppercase tracking-tighter italic">Neural<span className="text-primary">Playground</span></h1>
+                        <h1 className="text-xl font-black uppercase tracking-tighter italic">Code<span className="text-primary">Playground</span></h1>
                         <p className={cn(
                             "text-[10px] font-bold uppercase tracking-widest mt-0.5",
                             isDarkMode ? "text-white/30" : "text-slate-400"
-                        )}>Global IDE Instance • Node Primary</p>
+                        )}>Web Editor</p>
                     </div>
                 </div>
 
@@ -219,7 +219,7 @@ export default function PlaygroundPage() {
                             {output.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center opacity-10 space-y-4">
                                     <Terminal className={cn("h-10 w-10", isDarkMode ? "text-white" : "text-slate-400")} />
-                                    <p className={cn("text-[10px] font-black uppercase tracking-[0.3em]", isDarkMode ? "text-white" : "text-slate-500")}>Neural Socket Idle</p>
+                                    <p className={cn("text-[10px] font-black uppercase tracking-[0.3em]", isDarkMode ? "text-white" : "text-slate-500")}>Console Ready</p>
                                 </div>
                             ) : (
                                 output.map((log, i) => (

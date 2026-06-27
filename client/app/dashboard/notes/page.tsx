@@ -186,7 +186,7 @@ export default function NotesPage() {
                             <div className="h-12 w-12 rounded-full bg-secondary flex items-center justify-center mb-4">
                               <FileText className="h-6 w-6 opacity-20" />
                             </div>
-                            <p className="text-xs font-medium uppercase tracking-widest opacity-60">No artifacts found</p>
+                            <p className="text-xs font-medium uppercase tracking-widest opacity-60">No notes found</p>
                         </div>
                     ) : (
                         <AnimatePresence mode="popLayout">
@@ -283,8 +283,8 @@ export default function NotesPage() {
                                 className="text-center"
                             >
                                 <FileText className="h-16 md:h-20 w-16 md:w-20 mb-6 opacity-10 mx-auto" />
-                                <p className="text-lg md:text-xl font-bold text-foreground mb-2 tracking-tight">Technical Vault is Locked</p>
-                                <p className="text-xs md:text-sm text-muted-foreground mb-8 max-w-[240px] md:max-w-none">Select an artifact from the list to begin documenting.</p>
+                                <p className="text-lg md:text-xl font-bold text-foreground mb-2 tracking-tight">No Note Selected</p>
+                                <p className="text-xs md:text-sm text-muted-foreground mb-8 max-w-[240px] md:max-w-none">Select a note from the list to view or edit it.</p>
                                 <button 
                                     onClick={() => {
                                         if (typeof window !== 'undefined' && window.innerWidth < 768) setShowMobileList(true);
@@ -292,7 +292,7 @@ export default function NotesPage() {
                                     }}
                                     className="mx-auto block text-sm font-extrabold text-primary hover:text-primary/80 transition-all uppercase tracking-widest"
                                 >
-                                    {(typeof window !== 'undefined' && window.innerWidth < 768) ? "View Artifact List" : "Initialize New Artifact"}
+                                    {(typeof window !== 'undefined' && window.innerWidth < 768) ? "View Notes List" : "Create New Note"}
                                 </button>
                             </motion.div>
                         </div>
