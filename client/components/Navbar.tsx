@@ -8,9 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
-    const navLinks = [
-        { name: "Dashboard", href: "/dashboard" },
-    ];
+    const navLinks: { name: string; href: string }[] = [];
 
     return (
         <nav className="fixed top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-md">
@@ -40,12 +38,6 @@ export default function Navbar() {
                         className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                     >
                         Login
-                    </Link>
-                    <Link
-                        href="/register"
-                        className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-primary/90 hover:glow-primary"
-                    >
-                        Get Started
                     </Link>
                 </div>
 
@@ -84,13 +76,6 @@ export default function Navbar() {
                                 className="text-lg font-medium text-muted-foreground transition-colors hover:text-foreground"
                             >
                                 Login
-                            </Link>
-                            <Link
-                                href="/register"
-                                onClick={() => setIsOpen(false)}
-                                className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-primary py-4 text-center text-lg font-bold text-white transition-all hover:bg-primary/90 glow-primary"
-                            >
-                                Get Started
                             </Link>
                         </div>
                     </motion.div>

@@ -152,12 +152,12 @@ export const Sidebar = ({
             />
             <div className="flex h-full flex-col px-4 py-6">
                 {/* Brand & Close */}
-                <div className="mb-8 flex items-center justify-between px-2">
+                <div className="mb-6 flex items-center justify-between px-2">
                     <Link href="/dashboard" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                         <img 
                             src="/logo.png" 
                             alt="SmartDev AI Logo" 
-                            className="h-32 w-auto object-contain -ml-2"
+                            className="h-24 w-auto object-contain -ml-2"
                         />
                     </Link>
                     {setIsOpen && (
@@ -200,7 +200,7 @@ export const Sidebar = ({
                 {/* History Section */}
                 <div className="flex-1 flex flex-col min-h-0">
                     <div className="flex items-center justify-between px-3 mb-1">
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">Memory Bank</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">History</p>
                         <Link href="/dashboard/ai" onClick={() => setIsOpen?.(false)} className="p-1 rounded-lg hover:bg-black/5 text-muted-foreground hover:text-primary transition-colors">
                             <Plus className="h-3.5 w-3.5" />
                         </Link>

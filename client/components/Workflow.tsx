@@ -33,12 +33,12 @@ const steps = [
     {
         id: "03",
         title: "Automated Knowledge Bank",
-        description: "Every technical session is stored in the Memory Bank, allowing you to build a searchable corporate brain that evolves with your code.",
+        description: "Every technical session is stored in your History, allowing you to build a searchable corporate brain that evolves with your code.",
         points: ["Searchable Technical Logs", "Automated Decision Records", "Team Knowledge Sharing"],
         terminal: {
             command: "$ smartdev ship --log",
             status: "Capturing session metadata...",
-            output: "✓ Session saved to Memory Bank",
+            output: "✓ Session saved to History",
             subPoints: ["archived 12 technical snippets", "generated ADR #42", "updated knowledge graph"]
         },
         reverse: false

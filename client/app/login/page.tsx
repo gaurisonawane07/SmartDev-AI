@@ -58,9 +58,9 @@ export default function LoginPage() {
         className="glass-card w-full max-w-md rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10"
       >
         <div className="mb-8 md:mb-10 text-center">
-          <img 
-            src="/logo.png" 
-            alt="SmartDev AI Logo" 
+          <img
+            src="/logo.png"
+            alt="SmartDev AI Logo"
             className="mx-auto mb-4 h-48 w-auto object-contain"
           />
           <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight leading-tight">Welcome back</h1>
@@ -114,7 +114,7 @@ export default function LoginPage() {
               Remember me
             </label>
             <Link href="#" className="font-semibold text-primary hover:underline">
-              Forgot?
+              Forgot Password?
             </Link>
           </div>
 

@@ -26,38 +26,38 @@ export default function Footer() {
                             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900">Workspace</h4>
                             <ul className="space-y-4 text-xs font-bold text-slate-500">
                                 <li><a href="/dashboard" className="hover:text-sky-500 transition-colors">Overview</a></li>
-                                <li><a href="/dashboard/notes" className="hover:text-sky-500 transition-colors">Memory Bank</a></li>
+                                <li><a href="/dashboard/notes" className="hover:text-sky-500 transition-colors">History</a></li>
                                 <li><a href="/dashboard/ai" className="hover:text-sky-500 transition-colors">AI Assistant</a></li>
                             </ul>
                         </div>
                         <div className="space-y-6">
                             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900">Technical</h4>
                             <ul className="space-y-4 text-xs font-bold text-slate-500">
-                                <li><a href="#" className="hover:text-sky-500 transition-colors">RAG Architecture</a></li>
-                                <li><a href="#" className="hover:text-sky-500 transition-colors">API Reference</a></li>
-                                <li><a href="#" className="hover:text-sky-500 transition-colors">Security Audit</a></li>
+                                <li><a href="/technical/rag-architecture" className="hover:text-sky-500 transition-colors">RAG Architecture</a></li>
+                                <li><a href="/technical/api-reference" className="hover:text-sky-500 transition-colors">API Reference</a></li>
+                                <li><a href="/technical/security-audit" className="hover:text-sky-500 transition-colors">Security Audit</a></li>
                             </ul>
                         </div>
                         <div className="space-y-6">
                             <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900">Resources</h4>
                             <ul className="space-y-4 text-xs font-bold text-slate-500">
-                                <li><a href="#" className="hover:text-sky-500 transition-colors">Documentation</a></li>
-                                <li><a href="#" className="hover:text-sky-500 transition-colors">Changelog</a></li>
-                                <li><a href="#" className="hover:text-sky-500 transition-colors">Status</a></li>
+                                <li><a href="/docs" className="hover:text-sky-500 transition-colors">Documentation</a></li>
+                                <li><a href="/changelog" className="hover:text-sky-500 transition-colors">Changelog</a></li>
+                                <li><a href="/status" className="hover:text-sky-500 transition-colors">Status</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-20 flex flex-col items-center justify-between gap-6 border-t border-slate-50 pt-10 md:flex-row">
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">
-                        &copy; {new Date().getFullYear()} SmartDev AI &bull; Version 2.4.0-Stable
-                    </p>
+                <div className="mt-20 flex flex-col items-center justify-center gap-6 border-t border-slate-50 pt-10">
                     <div className="flex gap-8 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
-                        <a href="#" className="hover:text-slate-900 transition-colors">Privacy</a>
-                        <a href="#" className="hover:text-slate-900 transition-colors">Terms</a>
-                        <a href="#" className="hover:text-slate-900 transition-colors">OSS</a>
+                        <a href="/privacy" className="hover:text-slate-900 transition-colors">Privacy</a>
+                        <a href="/terms" className="hover:text-slate-900 transition-colors">Terms</a>
+                        <a href="/oss" className="hover:text-slate-900 transition-colors">OSS</a>
                     </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black">
+                        &copy; 2026 SmartDev AI
+                    </p>
                 </div>
             </div>
         </footer>
