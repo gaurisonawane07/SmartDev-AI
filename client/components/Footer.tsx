@@ -12,7 +12,7 @@ export default function Footer() {
                         <img 
                             src="/logo.png" 
                             alt="SmartDev AI Logo" 
-                            className="h-32 w-auto object-contain -ml-4 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer"
+                            className="h-10 w-auto object-contain grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer"
                         />
                         <p className="mt-4 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 leading-loose">
                             Semantic Intelligence <br />

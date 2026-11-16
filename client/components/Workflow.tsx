@@ -47,7 +47,7 @@ const steps = [
 
 export default function Workflow() {
     return (
-        <section className="mx-auto max-w-7xl px-6 py-24 md:py-40">
+        <section id="workflow" className="mx-auto max-w-7xl px-6 py-24 md:py-40">
             <div className="mb-24 text-center">
                 <motion.span 
                     initial={{ opacity: 0, y: 10 }}

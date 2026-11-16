@@ -38,7 +38,7 @@ const features = [
 
 export default function KeyFeatures() {
     return (
-        <section className="mx-auto max-w-7xl px-6 py-24 md:py-32">
+        <section id="features" className="mx-auto max-w-7xl px-6 py-24 md:py-32">
             <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
                 {features.map((feature, idx) => (
                     <motion.div
